@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Уровень: Уверенный - GeoWiki</title>
+    <link rel="stylesheet" href="../css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Прелоадер -->
+    <div id="preloader">
+        <div class="preloader-content">
+            <div class="spinner"></div>
+            <p>Загрузка уровня...</p>
+        </div>
+    </div>
+
+    <!-- Custom Cursor -->
+    <div class="cursor"></div>
+    <div class="cursor-follower"></div>
+
+    <!-- Анимированный фон -->
+    <div class="animated-bg"></div>
+
+    <header>
+        <nav class="glass-nav">
+            <div class="nav-container">
+                <a href="../index.html" class="logo">
+                    <span class="logo-icon">🌍</span>
+                    <span class="logo-text">GeoWiki</span>
+                </a>
+                <ul class="nav-links">
+                    <li><a href="../index.html" class="nav-link">Главная</a></li>
+                    <li><a href="../symbols/index.html" class="nav-link">Знаки</a></li>
+                </ul>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        <!-- Level Hero -->
+        <section class="level-hero">
+            <div class="level-hero-content">
+                <div class="level-badge">
+                    <span class="level-icon-large">🚀</span>
+                    <span class="level-name">Уверенный</span>
+                </div>
+                <h1 class="level-title">Продвинутые Концепции</h1>
+                <p class="level-description">Изучаем сложные картографические проекции, анализ рельефа и климатические зоны</p>
+                <div class="level-progress-indicator">
+                    <div class="progress-step active">
+                        <div class="step-number">1</div>
+                        <div class="step-label">Теория</div>
+                    </div>
+                    <div class="progress-connector"></div>
+                    <div class="progress-step">
+                        <div class="step-number">2</div>
+                        <div class="step-label">Практика</div>
+                    </div>
+                    <div class="progress-connector"></div>
+                    <div class="progress-step">
+                        <div class="step-number">3</div>
+                        <div class="step-label">Тест</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Theory Section -->
+        <section class="theory-section reveal">
+            <div class="section-container">
+                <h2 class="section-title">Теоретические Основы</h2>
+                <div class="theory-grid">
+                    <div class="theory-card">
+                        <div class="card-icon">🗺️</div>
+                        <h3>Картографические Проекции</h3>
+                        <p>Изучаем различные способы проецирования сферической поверхности Земли на плоскость</p>
+                    </div>
+                    <div class="theory-card">
+                        <div class="card-icon">🏔️</div>
+                        <h3>Формы Рельефа</h3>
+                        <p>Классификация и анализ гор, равнин, холмов и других форм земной поверхности</p>
+                    </div>
+                    <div class="theory-card">
+                        <div class="card-icon">🌡️</div>
+                        <h3>Климатические Зоны</h3>
+                        <p>Понимание климатических поясов и их влияния на природные зоны</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Interactive Practice -->
+        <section class="theory-section reveal">
+            <div class="section-container">
+                <h2 class="section-title">Интерактивная Практика</h2>
+                <div class="symbols-showcase">
+                    <h3 class="symbols-title">Условные Знаки Продвинутого Уровня</h3>
+                    <div class="symbols-grid">
+                        <div class="symbol-card">
+                            <div class="symbol-emoji">🏔️</div>
+                            <h4>Горы</h4>
+                            <p>Вертикальная штриховка для обозначения высот</p>
+                        </div>
+                        <div class="symbol-card">
+                            <div class="symbol-emoji">🌊</div>
+                            <h4>Реки</h4>
+                            <p>Синие линии различной толщины</p>
+                        </div>
+                        <div class="symbol-card">
+                            <div class="symbol-emoji">🌲</div>
+                            <h4>Леса</h4>
+                            <p>Зеленые значки деревьев</p>
+                        </div>
+                        <div class="symbol-card">
+                            <div class="symbol-emoji">🏙️</div>
+                            <h4>Города</h4>
+                            <p>Красные квадраты с названиями</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Quiz Section -->
+        <section class="theory-section reveal">
+            <div class="section-container">
+                <h2 class="section-title">Проверь Знания</h2>
+                <div class="quiz-container">
+                    <div class="quiz-card">
+                        <div class="quiz-header">
+                            <h3>Тест: Продвинутые Знаки</h3>
+                            <div class="quiz-progress">
+                                <span class="current-question">1</span> / <span class="total-questions">10</span>
+                            </div>
+                        </div>
+                        <div class="quiz-body">
+                            <div class="question" id="question">
+                                <p>Какой условный знак используется для обозначения гор на карте?</p>
+                            </div>
+                            <div class="options" id="options">
+                                <button class="option-btn" data-answer="A">Красные точки</button>
+                                <button class="option-btn" data-answer="B">Вертикальная штриховка</button>
+                                <button class="option-btn" data-answer="C">Голубые круги</button>
+                                <button class="option-btn" data-answer="D">Желтые треугольники</button>
+                            </div>
+                        </div>
+                        <div class="quiz-footer">
+                            <button class="quiz-btn" id="nextBtn" disabled>Следующий вопрос</button>
+                        </div>
+                    </div>
+                    <div class="quiz-results" id="results" style="display: none;">
+                        <h3>Результаты теста</h3>
+                        <div class="score-display">
+                            <span class="score">8/10</span>
+                            <span class="percentage">80%</span>
+                        </div>
+                        <p class="feedback">Отличный результат! Ты готов перейти на следующий уровень.</p>
+                        <button class="quiz-btn" onclick="location.href='../index.html'">Вернуться на главную</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <script src="../js/app.js"></script>
+    <script src="../js/main.js"></script>
+    <script src="../js/quiz.js"></script>
+    <script src="../js/progress.js"></script>
+</body>
+</html>

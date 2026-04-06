@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GeoWiki - Премиум Образовательный Сайт по Географии</title>
+    <meta name="description" content="Интерактивная образовательная платформа по географии с wow-эффектами. Изучайте условные знаки, проходите уровни и играйте в мини-игры.">
+    <meta name="keywords" content="география, образование, карты, условные знаки, обучение, интерактив, wow-эффекты">
+    <meta name="author" content="GeoWiki Team">
+    <meta name="robots" content="index, follow">
+    <meta property="og:title" content="GeoWiki - Премиум Образовательный Сайт по Географии">
+    <meta property="og:description" content="Интерактивная образовательная платформа по географии с wow-эффектами. Изучайте условные знаки, проходите уровни и играйте в мини-игры.">
+    <meta property="og:image" content="https://your-domain.com/preview.jpg">
+    <meta property="og:url" content="https://your-domain.com">
+    <meta property="og:type" content="website">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="GeoWiki - Премиум Образовательный Сайт по Географии">
+    <meta name="twitter:description" content="Интерактивная образовательная платформа по географии с wow-эффектами.">
+    <meta name="twitter:image" content="https://your-domain.com/preview.jpg">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🌍</text></svg>">
+    <link rel="stylesheet" href="design-system.css">
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Прелоадер -->
+    <div id="preloader">
+        <div class="preloader-content">
+            <div class="spinner"></div>
+            <p>Загрузка GeoWiki...</p>
+        </div>
+    </div>
+
+    <!-- Custom Cursor -->
+    <div class="cursor"></div>
+    <div class="cursor-follower"></div>
+
+    <!-- Анимированный фон -->
+    <div class="animated-bg"></div>
+
+    <header>
+        <nav class="glass-nav">
+            <div class="nav-container">
+                <div class="logo">
+                    <span class="logo-icon">🌍</span>
+                    <span class="logo-text">GeoWiki</span>
+                </div>
+                <ul class="nav-links">
+                    <li><a href="#levels" class="nav-link">Уровни</a></li>
+                    <li><a href="symbols/index.html" class="nav-link">Знаки</a></li>
+                    <li><a href="#progress" class="nav-link">Прогресс</a></li>
+                </ul>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        <!-- Hero Section -->
+        <section id="hero" class="hero-section">
+            <div class="hero-content">
+                <h1 class="hero-title">
+                    <span class="hero-title-main">Стань Географом</span>
+                    <span class="hero-title-sub">с GeoWiki</span>
+                </h1>
+                <p class="hero-subtitle">Интерактивное путешествие по миру географии. От базовых карт до профессиональных навыков навигации.</p>
+                <div class="hero-cta">
+                    <a href="#levels" class="cta-button">
+                        <span class="cta-text">Начать Путешествие</span>
+                        <span class="cta-arrow">→</span>
+                    </a>
+                </div>
+                <div class="hero-stats">
+                    <div class="stat">
+                        <span class="stat-number">5</span>
+                        <span class="stat-label">Уровней</span>
+                    </div>
+                    <div class="stat">
+                        <span class="stat-number">50+</span>
+                        <span class="stat-label">Знаков</span>
+                    </div>
+                    <div class="stat">
+                        <span class="stat-number">∞</span>
+                        <span class="stat-label">Знаний</span>
+                    </div>
+                </div>
+            </div>
+            <div class="hero-visual">
+                <div class="floating-elements">
+                    <div class="floating-card card-1">🗺️</div>
+                    <div class="floating-card card-2">🏔️</div>
+                    <div class="floating-card card-3">🌊</div>
+                    <div class="floating-card card-4">🏙️</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Levels Section -->
+        <section id="levels" class="levels-section">
+            <div class="section-container">
+                <h2 class="section-title">Выбери свой уровень</h2>
+                <p class="section-subtitle">Каждый уровень — новый шаг к мастерству географии</p>
+                <div class="levels-grid">
+                    <div class="level-card level-beginner" data-level="beginner">
+                        <div class="card-glow"></div>
+                        <div class="card-content">
+                            <div class="level-icon">🌱</div>
+                            <h3 class="level-title">Начальный</h3>
+                            <p class="level-desc">Основы географии, простые карты, базовые знаки</p>
+                            <div class="level-progress">
+                                <div class="progress-bar">
+                                    <div class="progress-fill" id="progress-beginner"></div>
+                                </div>
+                            </div>
+                            <a href="levels/beginner.html" class="level-btn">
+                                <span>Начать</span>
+                                <span class="btn-arrow">→</span>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="level-card level-confident" data-level="confident">
+                        <div class="card-glow"></div>
+                        <div class="card-content">
+                            <div class="level-icon">🌊</div>
+                            <h3 class="level-title">Уверенный</h3>
+                            <p class="level-desc">Типы карт, расширенные знаки, тесты</p>
+                            <div class="level-progress">
+                                <div class="progress-bar">
+                                    <div class="progress-fill" id="progress-confident"></div>
+                                </div>
+                            </div>
+                            <a href="levels/confident.html" class="level-btn">
+                                <span>Продолжить</span>
+                                <span class="btn-arrow">→</span>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="level-card level-expert" data-level="expert">
+                        <div class="card-glow"></div>
+                        <div class="card-content">
+                            <div class="level-icon">🏔️</div>
+                            <h3 class="level-title">Знаток</h3>
+                            <p class="level-desc">Климатические зоны, географические процессы</p>
+                            <div class="level-progress">
+                                <div class="progress-bar">
+                                    <div class="progress-fill" id="progress-expert"></div>
+                                </div>
+                            </div>
+                            <a href="levels/expert.html" class="level-btn">
+                                <span>Исследовать</span>
+                                <span class="btn-arrow">→</span>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="level-card level-pro" data-level="pro">
+                        <div class="card-glow"></div>
+                        <div class="card-content">
+                            <div class="level-icon">🧭</div>
+                            <h3 class="level-title">Профессионал</h3>
+                            <p class="level-desc">Топографические карты, навигация</p>
+                            <div class="level-progress">
+                                <div class="progress-bar">
+                                    <div class="progress-fill" id="progress-pro"></div>
+                                </div>
+                            </div>
+                            <a href="levels/professional.html" class="level-btn">
+                                <span>Мастер-класс</span>
+                                <span class="btn-arrow">→</span>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="level-card level-geo" data-level="geo">
+                        <div class="card-glow"></div>
+                        <div class="card-content">
+                            <div class="level-icon">👑</div>
+                            <h3 class="level-title">Географ</h3>
+                            <p class="level-desc">Полный набор знаков, ГИС, продвинутые кейсы</p>
+                            <div class="level-progress">
+                                <div class="progress-bar">
+                                    <div class="progress-fill" id="progress-geo"></div>
+                                </div>
+                            </div>
+                            <a href="levels/geographer.html" class="level-btn">
+                                <span>Стать Легендой</span>
+                                <span class="btn-arrow">→</span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Progress Section -->
+        <section id="progress" class="progress-section">
+            <div class="section-container">
+                <h2 class="section-title">Твой Прогресс</h2>
+                <div class="progress-container">
+                    <div class="progress-circle">
+                        <svg class="progress-svg" viewBox="0 0 100 100">
+                            <circle class="progress-bg" cx="50" cy="50" r="45"></circle>
+                            <circle class="progress-fill-circle" cx="50" cy="50" r="45" id="progressCircle"></circle>
+                        </svg>
+                        <div class="progress-text">
+                            <span class="progress-percent" id="progressPercent">0%</span>
+                            <span class="progress-label">Завершено</span>
+                        </div>
+                    </div>
+                    <div class="progress-details">
+                        <p id="progressText">Уровень: Начальный (0/5 пройдено)</p>
+                        <div class="achievements">
+                            <div class="achievement" id="achievement-1">
+                                <span class="achievement-icon">🌱</span>
+                                <span class="achievement-text">Первый шаг</span>
+                            </div>
+                            <div class="achievement" id="achievement-2">
+                                <span class="achievement-icon">🏆</span>
+                                <span class="achievement-text">Мастер карт</span>
+                            </div>
+                            <div class="achievement" id="achievement-3">
+                                <span class="achievement-icon">👑</span>
+                                <span class="achievement-text">Географ-легенда</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Mini Game Section -->
+        <section id="mini-game" class="mini-game-section">
+            <div class="section-container">
+                <h2 class="section-title">Мини-игра: Угадай Знак</h2>
+                <p class="section-subtitle">Проверь свои знания в веселой игре!</p>
+                <div class="game-container">
+                    <div class="game-card">
+                        <div class="game-question" id="gameQuestion">?</div>
+                        <div class="game-options" id="gameOptions">
+                            <!-- Options will be populated by JS -->
+                        </div>
+                        <button class="game-btn" id="nextQuestion">Следующий вопрос</button>
+                    </div>
+                    <div class="game-score">
+                        <span class="score-label">Счёт:</span>
+                        <span class="score-value" id="gameScore">0</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <div class="footer-content">
+            <p>Сделано с ❤️ для Даши. Открой мир географии!</p>
+            <div class="footer-links">
+                <a href="#hero">Наверх</a>
+                <a href="symbols/index.html">Знаки</a>
+            </div>
+        </div>
+    </footer>
+
+    <script src="js/app.js"></script>
+    <script src="js/main.js"></script>
+    <script src="js/progress.js"></script>
+    <script src="js/mini-game.js"></script>
+</body>
+</html>

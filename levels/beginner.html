@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Уровень: Начальный - GeoWiki</title>
+    <link rel="stylesheet" href="../css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Custom Cursor -->
+    <div class="cursor"></div>
+    <div class="cursor-follower"></div>
+
+    <!-- Animated Background -->
+    <div class="animated-bg"></div>
+
+    <header>
+        <nav class="glass-nav">
+            <div class="nav-container">
+                <div class="logo">
+                    <span class="logo-icon">🌍</span>
+                    <span class="logo-text">GeoWiki</span>
+                </div>
+                <ul class="nav-links">
+                    <li><a href="../index.html" class="nav-link">Главная</a></li>
+                    <li><a href="#theory" class="nav-link">Теория</a></li>
+                    <li><a href="#practice" class="nav-link">Тест</a></li>
+                </ul>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        <!-- Level Hero -->
+        <section class="level-hero">
+            <div class="level-hero-content">
+                <div class="level-badge">
+                    <span class="level-icon-large">🌱</span>
+                    <span class="level-name">Начальный уровень</span>
+                </div>
+                <h1 class="level-title">Основы географии</h1>
+                <p class="level-description">Познакомься с миром карт и условных знаков. Это первый шаг в твое географическое путешествие!</p>
+                <div class="level-progress-indicator">
+                    <div class="progress-step active">
+                        <span class="step-number">1</span>
+                        <span class="step-label">Теория</span>
+                    </div>
+                    <div class="progress-connector"></div>
+                    <div class="progress-step">
+                        <span class="step-number">2</span>
+                        <span class="step-label">Тест</span>
+                    </div>
+                    <div class="progress-connector"></div>
+                    <div class="progress-step">
+                        <span class="step-number">3</span>
+                        <span class="step-label">Завершение</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Theory Section -->
+        <section id="theory" class="theory-section">
+            <div class="section-container">
+                <h2 class="section-title">📚 Изучаем основы</h2>
+                <div class="theory-grid">
+                    <div class="theory-card reveal">
+                        <div class="card-icon">🌍</div>
+                        <h3>Что такое география?</h3>
+                        <p>География - это увлекательная наука о Земле! Она рассказывает о поверхности нашей планеты, о том, где живут люди, какие растения и животные населяют разные уголки мира, и как все это связано между собой.</p>
+                    </div>
+
+                    <div class="theory-card reveal">
+                        <div class="card-icon">🗺️</div>
+                        <h3>Карты - наши помощники</h3>
+                        <p>Карта - это специальное изображение Земли или её части. Она помогает нам найти нужное место, спланировать путешествие и понять, как устроен мир вокруг нас.</p>
+                    </div>
+
+                    <div class="theory-card reveal">
+                        <div class="card-icon">🏔️</div>
+                        <h3>Условные знаки</h3>
+                        <p>На картах разные объекты обозначаются специальными значками. Эти значки называются условными знаками. Давай познакомимся с самыми важными!</p>
+                    </div>
+                </div>
+
+                <div class="symbols-showcase">
+                    <h3 class="symbols-title">Основные условные знаки</h3>
+                    <div class="symbols-grid">
+                        <div class="symbol-card reveal">
+                            <div class="symbol-emoji">🏔️</div>
+                            <h4>Горы</h4>
+                            <p>Высокие места на Земле, покрытые снегом или камнями</p>
+                        </div>
+                        <div class="symbol-card reveal">
+                            <div class="symbol-emoji">🌊</div>
+                            <h4>Реки</h4>
+                            <p>Текущая вода, которая несет жизнь и соединяет земли</p>
+                        </div>
+                        <div class="symbol-card reveal">
+                            <div class="symbol-emoji">🏙️</div>
+                            <h4>Города</h4>
+                            <p>Места, где живут много людей и строят дома</p>
+                        </div>
+                        <div class="symbol-card reveal">
+                            <div class="symbol-emoji">🌲</div>
+                            <h4>Леса</h4>
+                            <p>Места с множеством деревьев, где живут животные</p>
+                        </div>
+                        <div class="symbol-card reveal">
+                            <div class="symbol-emoji">🛤️</div>
+                            <h4>Железные дороги</h4>
+                            <p>Пути для поездов, соединяющие города</p>
+                        </div>
+                        <div class="symbol-card reveal">
+                            <div class="symbol-emoji">🏖️</div>
+                            <h4>Пляжи</h4>
+                            <p>Места у воды, где можно отдыхать и купаться</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Practice Section -->
+        <section id="practice" class="practice-section">
+            <div class="section-container">
+                <h2 class="section-title">🧠 Проверь знания</h2>
+                <p class="section-subtitle">Ответь на вопросы и покажи, что ты усвоил материал!</p>
+
+                <div class="quiz-container">
+                    <div class="quiz-progress">
+                        <div class="progress-bar">
+                            <div class="progress-fill" id="quiz-progress-fill"></div>
+                        </div>
+                        <span class="progress-text">Вопрос <span id="current-question">1</span> из 5</span>
+                    </div>
+
+                    <div id="quiz-container">
+                        <div class="question-card active" id="q1">
+                            <div class="question-header">
+                                <span class="question-number">1</span>
+                                <h3>Что показывает географическая карта?</h3>
+                            </div>
+                            <div class="question-options">
+                                <label class="option">
+                                    <input type="radio" name="q1" value="a">
+                                    <span class="option-text">Землю и её поверхность</span>
+                                </label>
+                                <label class="option">
+                                    <input type="radio" name="q1" value="b">
+                                    <span class="option-text">Звёзды и планеты</span>
+                                </label>
+                                <label class="option">
+                                    <input type="radio" name="q1" value="c">
+                                    <span class="option-text">Внутреннее строение Земли</span>
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="question-card" id="q2">
+                            <div class="question-header">
+                                <span class="question-number">2</span>
+                                <h3>Какой знак обозначает горы на карте?</h3>
+                            </div>
+                            <div class="question-options">
+                                <label class="option">
+                                    <input type="radio" name="q2" value="a">
+                                    <span class="option-text">🌊</span>
+                                </label>
+                                <label class="option">
+                                    <input type="radio" name="q2" value="b">
+                                    <span class="option-text">🏔️</span>
+                                </label>
+                                <label class="option">
+                                    <input type="radio" name="q2" value="c">
+                                    <span class="option-text">🌲</span>
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="question-card" id="q3">
+                            <div class="question-header">
+                                <span class="question-number">3</span>
+                                <h3>Где обычно растут деревья?</h3>
+                            </div>
+                            <div class="question-options">
+                                <label class="option">
+                                    <input type="radio" name="q3" value="a">
+                                    <span class="option-text">В реках</span>
+                                </label>
+                                <label class="option">
+                                    <input type="radio" name="q3" value="b">
+                                    <span class="option-text">В лесах</span>
+                                </label>
+                                <label class="option">
+                                    <input type="radio" name="q3" value="c">
+                                    <span class="option-text">На пляжах</span>
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="question-card" id="q4">
+                            <div class="question-header">
+                                <span class="question-number">4</span>
+                                <h3>Что обозначает знак 🏙️?</h3>
+                            </div>
+                            <div class="question-options">
+                                <label class="option">
+                                    <input type="radio" name="q4" value="a">
+                                    <span class="option-text">Горы</span>
+                                </label>
+                                <label class="option">
+                                    <input type="radio" name="q4" value="b">
+                                    <span class="option-text">Город</span>
+                                </label>
+                                <label class="option">
+                                    <input type="radio" name="q4" value="c">
+                                    <span class="option-text">Реку</span>
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="question-card" id="q5">
+                            <div class="question-header">
+                                <span class="question-number">5</span>
+                                <h3>Зачем нужны условные знаки на картах?</h3>
+                            </div>
+                            <div class="question-options">
+                                <label class="option">
+                                    <input type="radio" name="q5" value="a">
+                                    <span class="option-text">Для красоты</span>
+                                </label>
+                                <label class="option">
+                                    <input type="radio" name="q5" value="b">
+                                    <span class="option-text">Чтобы показать, что находится на местности</span>
+                                </label>
+                                <label class="option">
+                                    <input type="radio" name="q5" value="c">
+                                    <span class="option-text">Чтобы запутать путешественников</span>
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="quiz-navigation">
+                            <button id="prev-question" class="nav-btn" disabled>
+                                <span>←</span> Назад
+                            </button>
+                            <button id="next-question" class="nav-btn">
+                                Далее <span>→</span>
+                            </button>
+                            <button id="submit-quiz" class="nav-btn primary" style="display: none;">
+                                Завершить тест
+                            </button>
+                        </div>
+                    </div>
+
+                    <div id="results" class="results-container" style="display: none;">
+                        <div class="results-card">
+                            <div class="results-header">
+                                <h3>Результаты теста</h3>
+                                <div class="results-score">
+                                    <span class="score-number" id="score-number">0</span>
+                                    <span class="score-total">/5</span>
+                                </div>
+                            </div>
+                            <div class="results-message" id="results-message"></div>
+                            <div class="results-actions">
+                                <button id="retry-quiz" class="action-btn secondary">Пройти снова</button>
+                                <button id="complete-level" class="action-btn primary" style="display: none;">Завершить уровень</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <div class="footer-content">
+            <p>GeoWiki - твой путь к географическим знаниям! 🌍</p>
+            <div class="footer-links">
+                <a href="../index.html">Главная</a>
+                <a href="#theory">Теория</a>
+                <a href="#practice">Тест</a>
+            </div>
+        </div>
+    </footer>
+
+    <script src="../js/main.js"></script>
+    <script src="../js/progress.js"></script>
+    <script src="../js/test.js"></script>
+</body>
+</html>

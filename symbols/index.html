@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Условные знаки - GeoWiki</title>
+    <link rel="stylesheet" href="../css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Custom Cursor -->
+    <div class="cursor"></div>
+    <div class="cursor-follower"></div>
+
+    <!-- Animated Background -->
+    <div class="animated-bg"></div>
+
+    <header>
+        <nav class="glass-nav">
+            <div class="nav-container">
+                <div class="logo">
+                    <span class="logo-icon">🌍</span>
+                    <span class="logo-text">GeoWiki</span>
+                </div>
+                <ul class="nav-links">
+                    <li><a href="../index.html" class="nav-link">Главная</a></li>
+                    <li><a href="#filters" class="nav-link">Знаки</a></li>
+                </ul>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        <!-- Symbols Hero -->
+        <section class="symbols-hero">
+            <div class="section-container">
+                <h1 class="symbols-title">🗺️ Каталог условных знаков</h1>
+                <p class="symbols-subtitle">Изучай символы, которые помогут тебе читать карты как профессионал</p>
+            </div>
+        </section>
+
+        <!-- Filters Section -->
+        <section id="filters" class="filters-section">
+            <div class="section-container">
+                <div class="filter-buttons">
+                    <button class="filter-btn active" data-filter="all">
+                        <span class="filter-icon">🌟</span>
+                        <span>Все знаки</span>
+                    </button>
+                    <button class="filter-btn" data-filter="relief">
+                        <span class="filter-icon">🏔️</span>
+                        <span>Рельеф</span>
+                    </button>
+                    <button class="filter-btn" data-filter="water">
+                        <span class="filter-icon">🌊</span>
+                        <span>Вода</span>
+                    </button>
+                    <button class="filter-btn" data-filter="cities">
+                        <span class="filter-icon">🏙️</span>
+                        <span>Города</span>
+                    </button>
+                    <button class="filter-btn" data-filter="transport">
+                        <span class="filter-icon">🚗</span>
+                        <span>Транспорт</span>
+                    </button>
+                    <button class="filter-btn" data-filter="infrastructure">
+                        <span class="filter-icon">🌉</span>
+                        <span>Инфраструктура</span>
+                    </button>
+                    <button class="filter-btn" data-filter="nature">
+                        <span class="filter-icon">🌲</span>
+                        <span>Природа</span>
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Symbols Grid -->
+        <section id="symbols" class="symbols-section">
+            <div class="section-container">
+                <div class="symbols-grid">
+                    <!-- Рельеф -->
+                    <div class="symbol-card reveal" data-category="relief">
+                        <div class="symbol-emoji">🏔️</div>
+                        <h3>Горы</h3>
+                        <p>Высокие возвышенности земной поверхности</p>
+                        <button class="symbol-btn" onclick="showModal('Горы', 'Высокие возвышенности земной поверхности. Обозначаются треугольниками или специальными значками. Горы могут быть разной высоты и формы.')">Подробнее</button>
+                    </div>
+
+                    <div class="symbol-card reveal" data-category="relief">
+                        <div class="symbol-emoji">🌾</div>
+                        <h3>Равнины</h3>
+                        <p>Плоские или слабо холмистые участки</p>
+                        <button class="symbol-btn" onclick="showModal('Равнины', 'Плоские или слабо холмистые участки земной поверхности. Равнины часто используются для сельского хозяйства.')">Подробнее</button>
+                    </div>
+
+                    <div class="symbol-card reveal" data-category="relief">
+                        <div class="symbol-emoji">⛰️</div>
+                        <h3>Скалы</h3>
+                        <p>Крутые каменные образования</p>
+                        <button class="symbol-btn" onclick="showModal('Скалы', 'Крутые каменные образования на поверхности земли. Скалы могут быть опасными для путешествий.')">Подробнее</button>
+                    </div>
+
+                    <!-- Вода -->
+                    <div class="symbol-card reveal" data-category="water">
+                        <div class="symbol-emoji">🌊</div>
+                        <h3>Реки</h3>
+                        <p>Текущие водные потоки</p>
+                        <button class="symbol-btn" onclick="showModal('Реки', 'Текущие водные потоки. Реки могут быть широкими или узкими, глубокими или мелкими.')">Подробнее</button>
+                    </div>
+
+                    <div class="symbol-card reveal" data-category="water">
+                        <div class="symbol-emoji">🏞️</div>
+                        <h3>Озера</h3>
+                        <p>Стоячие водоемы</p>
+                        <button class="symbol-btn" onclick="showModal('Озера', 'Стоячие водоемы, окруженные сушей. Озера могут быть пресными или солеными.')">Подробнее</button>
+                    </div>
+
+                    <div class="symbol-card reveal" data-category="water">
+                        <div class="symbol-emoji">🏖️</div>
+                        <h3>Море</h3>
+                        <p>Большие соленые водоемы</p>
+                        <button class="symbol-btn" onclick="showModal('Море', 'Большие соленые водоемы. Моря соединяются с океанами и омывают берега континентов.')">Подробнее</button>
+                    </div>
+
+                    <!-- Города -->
+                    <div class="symbol-card reveal" data-category="cities">
+                        <div class="symbol-emoji">🏙️</div>
+                        <h3>Города</h3>
+                        <p>Крупные населенные пункты</p>
+                        <button class="symbol-btn" onclick="showModal('Города', 'Крупные населенные пункты с большим количеством жителей. Города центры экономики и культуры.')">Подробнее</button>
+                    </div>
+
+                    <div class="symbol-card reveal" data-category="cities">
+                        <div class="symbol-emoji">🏘️</div>
+                        <h3>Деревни</h3>
+                        <p>Маленькие населенные пункты</p>
+                        <button class="symbol-btn" onclick="showModal('Деревни', 'Маленькие населенные пункты в сельской местности. Деревни часто окружены природой.')">Подробнее</button>
+                    </div>
+
+                    <!-- Транспорт -->
+                    <div class="symbol-card reveal" data-category="transport">
+                        <div class="symbol-emoji">🛤️</div>
+                        <h3>Железные дороги</h3>
+                        <p>Пути для поездов</p>
+                        <button class="symbol-btn" onclick="showModal('Железные дороги', 'Пути для поездов. Железные дороги соединяют города и позволяют быстро перемещаться на дальние расстояния.')">Подробнее</button>
+                    </div>
+
+                    <div class="symbol-card reveal" data-category="transport">
+                        <div class="symbol-emoji">🛣️</div>
+                        <h3>Автодороги</h3>
+                        <p>Пути для автомобилей</p>
+                        <button class="symbol-btn" onclick="showModal('Автодороги', 'Пути для автомобилей. Автодороги могут быть скоростными магистралями или обычными трассами.')">Подробнее</button>
+                    </div>
+
+                    <div class="symbol-card reveal" data-category="transport">
+                        <div class="symbol-emoji">✈️</div>
+                        <h3>Аэропорты</h3>
+                        <p>Места для самолетов</p>
+                        <button class="symbol-btn" onclick="showModal('Аэропорты', 'Места для взлета и посадки самолетов. Аэропорты позволяют путешествовать по воздуху.')">Подробнее</button>
+                    </div>
+
+                    <!-- Инфраструктура -->
+                    <div class="symbol-card reveal" data-category="infrastructure">
+                        <div class="symbol-emoji">🌉</div>
+                        <h3>Мосты</h3>
+                        <p>Сооружения над водоемами</p>
+                        <button class="symbol-btn" onclick="showModal('Мосты', 'Сооружения, позволяющие пересекать реки, овраги и другие препятствия.')">Подробнее</button>
+                    </div>
+
+                    <div class="symbol-card reveal" data-category="infrastructure">
+                        <div class="symbol-emoji">🚇</div>
+                        <h3>Тоннели</h3>
+                        <p>Подземные проходы</p>
+                        <button class="symbol-btn" onclick="showModal('Тоннели', 'Подземные проходы через горы или под водой. Тоннели позволяют сократить путь.')">Подробнее</button>
+                    </div>
+
+                    <!-- Природа -->
+                    <div class="symbol-card reveal" data-category="nature">
+                        <div class="symbol-emoji">🌲</div>
+                        <h3>Леса</h3>
+                        <p>Места с множеством деревьев</p>
+                        <button class="symbol-btn" onclick="showModal('Леса', 'Места с множеством деревьев. Леса являются домом для многих животных и растений.')">Подробнее</button>
+                    </div>
+
+                    <div class="symbol-card reveal" data-category="nature">
+                        <div class="symbol-emoji">🌳</div>
+                        <h3>Парки</h3>
+                        <p>Зеленые зоны отдыха</p>
+                        <button class="symbol-btn" onclick="showModal('Парки', 'Зеленые зоны отдыха в городах. Парки предназначены для прогулок и отдыха.')">Подробнее</button>
+                    </div>
+
+                    <div class="symbol-card reveal" data-category="nature">
+                        <div class="symbol-emoji">🏜️</div>
+                        <h3>Пустыни</h3>
+                        <p>Сухие безводные территории</p>
+                        <button class="symbol-btn" onclick="showModal('Пустыни', 'Сухие безводные территории с экстремальными температурами. Пустыни могут быть песчаными или каменистыми.')">Подробнее</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Modal Window -->
+    <div id="modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="modal-title"></h2>
+                <span class="modal-close" onclick="closeModal()">&times;</span>
+            </div>
+            <div class="modal-body">
+                <p id="modal-description"></p>
+            </div>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <div class="footer-content">
+            <p>GeoWiki - изучай географию с удовольствием! 🌍</p>
+            <div class="footer-links">
+                <a href="../index.html">Главная</a>
+                <a href="#filters">Знаки</a>
+            </div>
+        </div>
+    </footer>
+
+    <script src="../js/main.js"></script>
+    <script src="../js/modal.js"></script>
+    <script src="../js/filter.js"></script>
+</body>
+</html>
+                </div>
+
+                <!-- Вода -->
+                <div class="symbol-card" data-category="water">
+                    <div class="symbol-icon">🌊</div>
+                    <h3>Реки</h3>
+                    <p>Естественные водные потоки</p>
+                    <button class="btn" onclick="showModal('Реки', 'Естественные водные потоки, текущие в русле.')">Подробнее</button>
+                </div>
+
+                <div class="symbol-card" data-category="water">
+                    <div class="symbol-icon">🏞️</div>
+                    <h3>Озера</h3>
+                    <p>Замкнутые водоемы</p>
+                    <button class="btn" onclick="showModal('Озера', 'Замкнутые водоемы в естественных впадинах.')">Подробнее</button>
+                </div>
+
+                <!-- Города -->
+                <div class="symbol-card" data-category="cities">
+                    <div class="symbol-icon">🏙️</div>
+                    <h3>Города</h3>
+                    <p>Крупные населенные пункты</p>
+                    <button class="btn" onclick="showModal('Города', 'Крупные населенные пункты с развитой инфраструктурой.')">Подробнее</button>
+                </div>
+
+                <div class="symbol-card" data-category="cities">
+                    <div class="symbol-icon">🏘️</div>
+                    <h3>Деревни</h3>
+                    <p>Маленькие населенные пункты</p>
+                    <button class="btn" onclick="showModal('Деревни', 'Маленькие населенные пункты в сельской местности.')">Подробнее</button>
+                </div>
+
+                <!-- Транспорт -->
+                <div class="symbol-card" data-category="transport">
+                    <div class="symbol-icon">🛣️</div>
+                    <h3>Дороги</h3>
+                    <p>Автомобильные пути</p>
+                    <button class="btn" onclick="showModal('Дороги', 'Автомобильные пути для передвижения.')">Подробнее</button>
+                </div>
+
+                <div class="symbol-card" data-category="transport">
+                    <div class="symbol-icon">🚂</div>
+                    <h3>Железные дороги</h3>
+                    <p>Рельсовые пути для поездов</p>
+                    <button class="btn" onclick="showModal('Железные дороги', 'Рельсовые пути для передвижения поездов.')">Подробнее</button>
+                </div>
+
+                <!-- Инфраструктура -->
+                <div class="symbol-card" data-category="infrastructure">
+                    <div class="symbol-icon">🌉</div>
+                    <h3>Мосты</h3>
+                    <p>Сооружения для пересечения препятствий</p>
+                    <button class="btn" onclick="showModal('Мосты', 'Сооружения для пересечения рек, оврагов и других препятствий.')">Подробнее</button>
+                </div>
+
+                <!-- Природа -->
+                <div class="symbol-card" data-category="nature">
+                    <div class="symbol-icon">🌲</div>
+                    <h3>Леса</h3>
+                    <p>Заросли деревьев</p>
+                    <button class="btn" onclick="showModal('Леса', 'Заросли деревьев и кустарников.')">Подробнее</button>
+                </div>
+
+                <div class="symbol-card" data-category="nature">
+                    <div class="symbol-icon">🏜️</div>
+                    <h3>Пустыни</h3>
+                    <p>Сухие безводные территории</p>
+                    <button class="btn" onclick="showModal('Пустыни', 'Сухие безводные территории с минимальной растительностью.')">Подробнее</button>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Модальное окно -->
+    <div id="modal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal()">&times;</span>
+            <h2 id="modal-title"></h2>
+            <p id="modal-description"></p>
+        </div>
+    </div>
+
+    <footer>
+        <p><a href="../index.html">Вернуться на главную</a></p>
+    </footer>
+
+    <script src="../js/main.js"></script>
+    <script src="../js/modal.js"></script>
+    <script src="../js/filter.js"></script>
+</body>
+</html>

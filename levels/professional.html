@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Уровень: Профессионал - GeoWiki</title>
+    <link rel="stylesheet" href="../css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Прелоадер -->
+    <div id="preloader">
+        <div class="preloader-content">
+            <div class="spinner"></div>
+            <p>Загрузка уровня...</p>
+        </div>
+    </div>
+
+    <!-- Custom Cursor -->
+    <div class="cursor"></div>
+    <div class="cursor-follower"></div>
+
+    <!-- Анимированный фон -->
+    <div class="animated-bg"></div>
+
+    <header>
+        <nav class="glass-nav">
+            <div class="nav-container">
+                <a href="../index.html" class="logo">
+                    <span class="logo-icon">🌍</span>
+                    <span class="logo-text">GeoWiki</span>
+                </a>
+                <ul class="nav-links">
+                    <li><a href="../index.html" class="nav-link">Главная</a></li>
+                    <li><a href="../symbols/index.html" class="nav-link">Знаки</a></li>
+                </ul>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        <!-- Level Hero -->
+        <section class="level-hero">
+            <div class="level-hero-content">
+                <div class="level-badge">
+                    <span class="level-icon-large">💼</span>
+                    <span class="level-name">Профессионал</span>
+                </div>
+                <h1 class="level-title">Профессиональные Инструменты</h1>
+                <p class="level-description">Работа с профессиональным картографическим ПО и анализом больших данных</p>
+                <div class="level-progress-indicator">
+                    <div class="progress-step active">
+                        <div class="step-number">1</div>
+                        <div class="step-label">Инструменты</div>
+                    </div>
+                    <div class="progress-connector"></div>
+                    <div class="progress-step">
+                        <div class="step-number">2</div>
+                        <div class="step-label">Анализ</div>
+                    </div>
+                    <div class="progress-connector"></div>
+                    <div class="progress-step">
+                        <div class="step-number">3</div>
+                        <div class="step-label">Проект</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Tools Section -->
+        <section class="theory-section reveal">
+            <div class="section-container">
+                <h2 class="section-title">Профессиональные Инструменты</h2>
+                <div class="theory-grid">
+                    <div class="theory-card">
+                        <div class="card-icon">🖥️</div>
+                        <h3>ArcGIS Pro</h3>
+                        <p>Профессиональная ГИС платформа для анализа и визуализации</p>
+                    </div>
+                    <div class="theory-card">
+                        <div class="card-icon">📊</div>
+                        <h3>QGIS</h3>
+                        <p>Открытая ГИС система для профессиональной работы</p>
+                    </div>
+                    <div class="theory-card">
+                        <div class="card-icon">🛰️</div>
+                        <h3>Дистанционное Зондирование</h3>
+                        <p>Анализ спутниковых изображений и аэрофотосъемки</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Professional Practice -->
+        <section class="theory-section reveal">
+            <div class="section-container">
+                <h2 class="section-title">Профессиональная Работа</h2>
+                <div class="symbols-showcase">
+                    <h3 class="symbols-title">Специализированные Знаки и Символы</h3>
+                    <div class="symbols-grid">
+                        <div class="symbol-card">
+                            <div class="symbol-emoji">🏗️</div>
+                            <h4>Инфраструктура</h4>
+                            <p>Транспортные сети и коммуникации</p>
+                        </div>
+                        <div class="symbol-card">
+                            <div class="symbol-emoji">🏭</div>
+                            <h4>Промышленность</h4>
+                            <p>Производственные объекты</p>
+                        </div>
+                        <div class="symbol-card">
+                            <div class="symbol-emoji">🌾</div>
+                            <h4>Сельское Хозяйство</h4>
+                            <p>Землепользование и угодья</p>
+                        </div>
+                        <div class="symbol-card">
+                            <div class="symbol-emoji">🏞️</div>
+                            <h4>Охрана Природы</h4>
+                            <p>Заповедные зоны и парки</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Professional Assessment -->
+        <section class="theory-section reveal">
+            <div class="section-container">
+                <h2 class="section-title">Профессиональная Оценка</h2>
+                <div class="quiz-container">
+                    <div class="quiz-card">
+                        <div class="quiz-header">
+                            <h3>Тест: Профессиональные Навыки</h3>
+                            <div class="quiz-progress">
+                                <span class="current-question">1</span> / <span class="total-questions">20</span>
+                            </div>
+                        </div>
+                        <div class="quiz-body">
+                            <div class="question" id="question">
+                                <p>Какой инструмент используется для создания топографических карт?</p>
+                            </div>
+                            <div class="options" id="options">
+                                <button class="option-btn" data-answer="A">Paint</button>
+                                <button class="option-btn" data-answer="B">ArcGIS</button>
+                                <button class="option-btn" data-answer="C">Word</button>
+                                <button class="option-btn" data-answer="D">Excel</button>
+                            </div>
+                        </div>
+                        <div class="quiz-footer">
+                            <button class="quiz-btn" id="nextBtn" disabled>Следующий вопрос</button>
+                        </div>
+                    </div>
+                    <div class="quiz-results" id="results" style="display: none;">
+                        <h3>Результаты теста</h3>
+                        <div class="score-display">
+                            <span class="score">16/20</span>
+                            <span class="percentage">80%</span>
+                        </div>
+                        <p class="feedback">Превосходно! Ты настоящий профессионал географии.</p>
+                        <button class="quiz-btn" onclick="location.href='../index.html'">Вернуться на главную</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <script src="../js/app.js"></script>
+    <script src="../js/main.js"></script>
+    <script src="../js/quiz.js"></script>
+    <script src="../js/progress.js"></script>
+</body>
+</html>
