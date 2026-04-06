@@ -39,6 +39,9 @@ class GeoWikiApp {
      * Initialize all application modules
      */
     async initModules() {
+        const currentScript = document.currentScript || document.querySelector('script[src*="/js/app.js"]');
+        const appBaseUrl = currentScript ? new URL('.', currentScript.src).href : `${window.location.origin}/js/`;
+
         const modules = [
             { name: 'progress', path: './progress.js', class: 'ProgressManager' },
             { name: 'modal', path: './modal.js', class: 'ModalManager' },
@@ -48,21 +51,20 @@ class GeoWikiApp {
         ];
 
         for (const module of modules) {
+            if (window[module.class]) {
+                this.modules[module.name] = window[module.class];
+                console.log(`✅ Module ${module.name} already available`);
+                continue;
+            }
+
             try {
-                // Dynamic import for better performance
                 const moduleScript = document.createElement('script');
-                moduleScript.src = module.path;
-                moduleScript.type = 'module';
+                moduleScript.src = new URL(module.path, appBaseUrl).href;
+                moduleScript.async = false;
+                document.head.appendChild(moduleScript);
 
-                await new Promise((resolve, reject) => {
-                    moduleScript.onload = resolve;
-                    moduleScript.onerror = reject;
-                    document.head.appendChild(moduleScript);
-                });
-
-                // Wait for module to be available globally
                 await this.waitForModule(module.class);
-
+                this.modules[module.name] = window[module.class];
                 console.log(`✅ Module ${module.name} loaded`);
 
             } catch (error) {

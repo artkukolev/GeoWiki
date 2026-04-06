@@ -1,46 +1,53 @@
-// modal.js - Управление модальными окнами
-
-function showModal(title, description) {
-    const modal = document.getElementById('modal');
-    const modalTitle = document.getElementById('modal-title');
-    const modalDescription = document.getElementById('modal-description');
-
-    if (modal && modalTitle && modalDescription) {
-        modalTitle.textContent = title;
-        modalDescription.textContent = description;
-        modal.style.display = 'block';
-
-        // Анимация появления
-        setTimeout(() => {
-            modal.classList.add('show');
-        }, 10);
+class ModalManager {
+    constructor() {
+        this.modal = document.getElementById('modal');
+        this.modalTitle = document.getElementById('modal-title');
+        this.modalDescription = document.getElementById('modal-description');
+        this.bindEvents();
     }
-}
 
-function closeModal() {
-    const modal = document.getElementById('modal');
-    if (modal) {
-        modal.classList.remove('show');
+    bindEvents() {
+        document.addEventListener('click', (event) => {
+            if (event.target === this.modal) {
+                this.closeModal();
+            }
+        });
+
+        document.addEventListener('keydown', (event) => {
+            if (event.key === 'Escape') {
+                this.closeModal();
+            }
+        });
+    }
+
+    showModal(title, description) {
+        if (!this.modal || !this.modalTitle || !this.modalDescription) return;
+        this.modalTitle.textContent = title;
+        this.modalDescription.textContent = description;
+        this.modal.style.display = 'block';
+        setTimeout(() => this.modal.classList.add('show'), 10);
+    }
+
+    closeModal() {
+        if (!this.modal) return;
+        this.modal.classList.remove('show');
         setTimeout(() => {
-            modal.style.display = 'none';
+            if (this.modal) {
+                this.modal.style.display = 'none';
+            }
         }, 300);
     }
 }
 
-// Закрытие по клику вне модального окна
-window.onclick = function(event) {
-    const modal = document.getElementById('modal');
-    if (event.target === modal) {
-        closeModal();
-    }
-}
-
-// Закрытие по клавише Escape
-document.addEventListener('keydown', function(event) {
-    if (event.key === 'Escape') {
-        closeModal();
-    }
-});
-
-// Экспорт для глобального доступа
 window.ModalManager = ModalManager;
+window.showModal = (title, description) => {
+    if (!window.modalManager) {
+        window.modalManager = new ModalManager();
+    }
+    window.modalManager.showModal(title, description);
+};
+window.closeModal = () => {
+    if (window.modalManager) {
+        window.modalManager.closeModal();
+    }
+};
