@@ -459,6 +459,9 @@ const beginnerQuestions = [
     { correct: 'b' }  // В лесах
 ];
 
+// Экспорт для глобального доступа
+window.QuizManager = QuizManager;
+
 // Инициализация тестов на страницах
 document.addEventListener('DOMContentLoaded', function() {
     if (document.getElementById('quiz-container')) {

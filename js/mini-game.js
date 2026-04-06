@@ -150,4 +150,5 @@ document.addEventListener('DOMContentLoaded', function() {
             window.unlockAchievement(id);
         }
     }
-});
+});// Экспорт для глобального доступа
+window.MiniGameManager = MiniGameManager;

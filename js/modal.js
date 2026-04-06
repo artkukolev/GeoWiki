@@ -41,3 +41,6 @@ document.addEventListener('keydown', function(event) {
         closeModal();
     }
 });
+
+// Экспорт для глобального доступа
+window.ModalManager = ModalManager;
