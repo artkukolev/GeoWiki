@@ -1,68 +1,247 @@
 /**
- * GEOWIKI Main Module
- * Core animations, interactions, and wow effects
+ * GeoWiki Bootstrap
+ * Main application initializer with modular architecture
  */
 
-class MainManager {
+class GeoWikiBootstrap {
     constructor() {
-        this.cursor = null;
-        this.cursorFollower = null;
-        this.particles = [];
-        this.animationFrame = null;
+        this.app = null;
+        this.mapManager = null;
+        this.encyclopediaManager = null;
+        this.profileManager = null;
+        this.landingManager = null;
+        this.progressManager = null;
+        this.modalManager = null;
     }
 
-    init() {
-        this.initPreloader();
-        this.initCustomCursor();
-        this.initScrollAnimations();
-        this.initWowEffects();
+    /**
+     * Main initialization sequence
+     */
+    async init() {
+        try {
+            console.log('🚀 Starting GeoWiki Bootstrap...');
+
+            // Sequential initialization to prevent race conditions
+            await this.loadDataLayer();
+            await this.initCoreSystems();
+            await this.initUILayer();
+            await this.startApp();
+
+            console.log('✅ GeoWiki Bootstrap completed successfully');
+        } catch (error) {
+            console.error('❌ Bootstrap failed:', error);
+            this.showErrorScreen(error);
+        }
+    }
+
+    /**
+     * Load data layer
+     */
+    async loadDataLayer() {
+        console.log('📊 Loading data layer...');
+
+        try {
+            // Load countries data
+            const countriesResponse = await fetch('./data/countries.json');
+            if (!countriesResponse.ok) throw new Error('Failed to load countries data');
+            window.countriesData = await countriesResponse.json();
+
+            // Load other data as needed
+            console.log('✅ Data layer loaded');
+        } catch (error) {
+            throw new Error(`Data loading failed: ${error.message}`);
+        }
+    }
+
+    /**
+     * Initialize core systems
+     */
+    async initCoreSystems() {
+        console.log('⚙️ Initializing core systems...');
+
+        // Initialize progress system
+        if (typeof ProgressManager !== 'undefined') {
+            this.progressManager = new ProgressManager();
+            await this.progressManager.init();
+        }
+
+        // Initialize modal system
+        if (typeof ModalManager !== 'undefined') {
+            this.modalManager = new ModalManager();
+            await this.modalManager.init();
+        }
+
+        console.log('✅ Core systems initialized');
+    }
+
+    /**
+     * Initialize UI layer
+     */
+    async initUILayer() {
+        console.log('🎨 Initializing UI layer...');
+
+        // Initialize main UI components
+        this.initAnimations();
         this.initInteractions();
-        this.initParallax();
-        this.initDynamicBackground();
+
+        // Initialize page-specific components
+        const currentPage = this.getCurrentPage();
+        await this.initPageComponents(currentPage);
+
+        console.log('✅ UI layer initialized');
     }
 
     /**
-     * Initialize preloader with premium animation
+     * Start the application
      */
-    initPreloader() {
-        const preloader = document.getElementById('preloader');
-        if (!preloader) return;
+    async startApp() {
+        console.log('🚀 Starting application...');
 
-        window.addEventListener('load', () => {
-            setTimeout(() => {
-                preloader.classList.add('hidden');
-                this.startWowSequence();
-            }, 1000);
+        // Start main app logic
+        this.app = new GeoWikiApp();
+        await this.app.start();
+
+        console.log('✅ Application started');
+    }
+
+    /**
+     * Get current page type
+     */
+    getCurrentPage() {
+        const path = window.location.pathname;
+        if (path.includes('map.html')) return 'map';
+        if (path.includes('encyclopedia.html')) return 'encyclopedia';
+        if (path.includes('profile.html')) return 'profile';
+        return 'landing';
+    }
+
+    /**
+     * Initialize page-specific components
+     */
+    async initPageComponents(page) {
+        switch (page) {
+            case 'map':
+                await this.initMapPage();
+                break;
+            case 'encyclopedia':
+                await this.initEncyclopediaPage();
+                break;
+            case 'profile':
+                await this.initProfilePage();
+                break;
+            case 'landing':
+                await this.initLandingPage();
+                break;
+        }
+    }
+
+    /**
+     * Initialize map page
+     */
+    async initMapPage() {
+        console.log('🗺️ Initializing map page...');
+
+        // Lazy load Leaflet
+        await this.loadLeaflet();
+
+        // Load map manager
+        await this.loadScript('./js/map-manager.js');
+
+        // Initialize map
+        this.mapManager = new MapManager();
+        await this.mapManager.init();
+    }
+
+    /**
+     * Initialize encyclopedia page
+     */
+    async initEncyclopediaPage() {
+        console.log('📖 Initializing encyclopedia page...');
+
+        // Load encyclopedia manager
+        await this.loadScript('./js/encyclopedia-manager.js');
+
+        // Initialize encyclopedia
+        this.encyclopediaManager = new EncyclopediaManager();
+        await this.encyclopediaManager.init();
+    }
+
+    /**
+     * Initialize profile page
+     */
+    async initProfilePage() {
+        console.log('👤 Initializing profile page...');
+
+        // Load profile manager
+        await this.loadScript('./js/profile-manager.js');
+
+        // Initialize profile
+        this.profileManager = new ProfileManager();
+        await this.profileManager.init();
+    }
+
+    /**
+     * Initialize landing page
+     */
+    async initLandingPage() {
+        console.log('🏠 Initializing landing page...');
+
+        // Load landing manager
+        await this.loadScript('./js/landing-manager.js');
+
+        // Initialize landing
+        this.landingManager = new LandingManager();
+        await this.landingManager.init();
+    }
+
+    /**
+     * Load script dynamically
+     */
+    loadScript(src) {
+        return new Promise((resolve, reject) => {
+            const script = document.createElement('script');
+            script.src = src;
+            script.onload = resolve;
+            script.onerror = reject;
+            document.head.appendChild(script);
         });
     }
 
     /**
-     * Start wow sequence after preloader
+     * Lazy load Leaflet library
      */
-    startWowSequence() {
-        // Sequential reveal of hero elements
-        const elements = [
-            '.hero-title',
-            '.hero-subtitle',
-            '.hero-cta',
-            '.hero-stats'
-        ];
+    async loadLeaflet() {
+        return new Promise((resolve, reject) => {
+            if (window.L) {
+                resolve();
+                return;
+            }
 
-        elements.forEach((selector, index) => {
-            setTimeout(() => {
-                const element = document.querySelector(selector);
-                if (element) {
-                    element.style.opacity = '0';
-                    element.style.transform = 'translateY(30px)';
-                    element.style.transition = 'all 0.8s cubic-bezier(0.4, 0, 0.2, 1)';
+            const script = document.createElement('script');
+            script.src = 'https://unpkg.com/leaflet@1.9.4/dist/leaflet.js';
+            script.onload = resolve;
+            script.onerror = reject;
+            document.head.appendChild(script);
 
-                    requestAnimationFrame(() => {
-                        element.style.opacity = '1';
-                        element.style.transform = 'translateY(0)';
-                    });
-                }
-            }, index * 200);
+            const link = document.createElement('link');
+            link.rel = 'stylesheet';
+            link.href = 'https://unpkg.com/leaflet@1.9.4/dist/leaflet.css';
+            document.head.appendChild(link);
         });
+    }
+
+    /**
+     * Initialize animations and interactions
+     */
+    initAnimations() {
+        // Custom cursor
+        this.initCustomCursor();
+
+        // Scroll animations
+        this.initScrollAnimations();
+
+        // Wow effects
+        this.initWowEffects();
     }
 
     /**
@@ -312,133 +491,162 @@ class MainManager {
     }
 
     /**
-     * Initialize card hover effects
+     * Initialize card effects
      */
     initCardEffects() {
-        document.querySelectorAll('.level-card, .symbol-card').forEach(card => {
+        document.querySelectorAll('.level-card, .continent-card, .game-option').forEach(card => {
             card.addEventListener('mouseenter', function() {
-                this.style.transform = 'translateY(-15px) rotateX(5deg)';
-                this.style.boxShadow = '0 30px 80px rgba(0, 0, 0, 0.2)';
+                this.style.transform = 'translateY(-5px)';
+                this.style.boxShadow = '0 10px 30px rgba(77, 163, 255, 0.3)';
             });
             card.addEventListener('mouseleave', function() {
-                this.style.transform = 'translateY(0) rotateX(0)';
-                this.style.boxShadow = '0 20px 60px rgba(0, 0, 0, 0.15)';
+                this.style.transform = 'translateY(0)';
+                this.style.boxShadow = '0 5px 15px rgba(0, 0, 0, 0.3)';
             });
         });
-    }
-
-    /**
-     * Initialize parallax effects
-     */
-    initParallax() {
-        window.addEventListener('scroll', () => {
-            const scrolled = window.pageYOffset;
-            const heroVisual = document.querySelector('.hero-visual');
-            if (heroVisual) {
-                heroVisual.style.transform = `translateY(${scrolled * 0.5}px)`;
-            }
-
-            const animatedBg = document.querySelector('.animated-bg');
-            if (animatedBg) {
-                animatedBg.style.transform = `translateY(${scrolled * -0.5}px)`;
-            }
-        });
-    }
-
-    /**
-     * Initialize dynamic background gradient
-     */
-    initDynamicBackground() {
-        let hue = 0;
-        const updateBackground = () => {
-            hue = (hue + 0.5) % 360;
-            const animatedBg = document.querySelector('.animated-bg');
-            if (animatedBg) {
-                animatedBg.style.filter = `hue-rotate(${hue}deg)`;
-            }
-            requestAnimationFrame(updateBackground);
-        };
-        updateBackground();
     }
 
     /**
      * Initialize notification system
      */
     initNotificationSystem() {
-        window.showNotification = (message, type = 'success') => {
+        // Create notification container if it doesn't exist
+        if (!document.querySelector('#notification-container')) {
+            const container = document.createElement('div');
+            container.id = 'notification-container';
+            container.style.cssText = `
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                z-index: 1000;
+                pointer-events: none;
+            `;
+            document.body.appendChild(container);
+        }
+
+        // Add global notification function
+        window.showNotification = (message, type = 'info') => {
+            const container = document.querySelector('#notification-container');
             const notification = document.createElement('div');
             notification.className = `notification notification-${type}`;
-            notification.innerHTML = `
-                <div class="notification-content">
-                    <span class="notification-icon">${type === 'success' ? '✓' : '⚠'}</span>
-                    <span class="notification-text">${message}</span>
-                </div>
-            `;
             notification.style.cssText = `
-                position: fixed;
-                top: 100px;
-                right: 20px;
-                background: ${type === 'success' ? 'var(--beginner-color)' : 'var(--pro-color)'};
-                color: white;
-                padding: 1rem 1.5rem;
-                border-radius: var(--border-radius-lg);
-                box-shadow: var(--shadow-glow);
-                z-index: 1000;
-                transform: translateX(100%);
-                transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+                background: var(--glass-bg);
                 backdrop-filter: blur(10px);
-                border: 1px solid rgba(255, 255, 255, 0.2);
+                border: 1px solid var(--glass-border);
+                border-radius: 12px;
+                padding: 16px 20px;
+                margin-bottom: 10px;
+                color: white;
+                font-weight: 500;
+                box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+                transform: translateX(100%);
+                transition: transform 0.3s ease-out;
+                pointer-events: auto;
+                cursor: pointer;
             `;
-            document.body.appendChild(notification);
 
+            notification.textContent = message;
+            container.appendChild(notification);
+
+            // Animate in
             setTimeout(() => {
                 notification.style.transform = 'translateX(0)';
-            }, 100);
+            }, 10);
 
+            // Auto remove
             setTimeout(() => {
                 notification.style.transform = 'translateX(100%)';
                 setTimeout(() => {
                     if (notification.parentNode) {
-                        document.body.removeChild(notification);
+                        notification.parentNode.removeChild(notification);
                     }
                 }, 300);
             }, 3000);
-        };
 
-        window.unlockAchievement = (achievementId) => {
-            const achievement = document.getElementById(achievementId);
-            if (achievement && !achievement.classList.contains('unlocked')) {
-                achievement.classList.add('unlocked');
-                achievement.style.animation = 'bounce 0.6s ease';
+            // Click to dismiss
+            notification.addEventListener('click', () => {
+                notification.style.transform = 'translateX(100%)';
                 setTimeout(() => {
-                    achievement.style.animation = '';
-                }, 600);
-                window.showNotification('Новое достижение разблокировано!', 'success');
-            }
-        };
-
-        window.animateProgress = (element, percentage) => {
-            element.style.width = percentage + '%';
+                    if (notification.parentNode) {
+                        notification.parentNode.removeChild(notification);
+                    }
+                }, 300);
+            });
         };
     }
 
     /**
-     * Cleanup method
+     * Initialize parallax effects
      */
-    destroy() {
-        if (this.animationFrame) {
-            cancelAnimationFrame(this.animationFrame);
-        }
-        // Remove event listeners if needed
+    initParallax() {
+        const parallaxElements = document.querySelectorAll('.parallax');
+
+        const handleScroll = () => {
+            const scrolled = window.pageYOffset;
+
+            parallaxElements.forEach(element => {
+                const rate = element.dataset.rate || 0.5;
+                const yPos = -(scrolled * rate);
+                element.style.transform = `translateY(${yPos}px)`;
+            });
+        };
+
+        window.addEventListener('scroll', handleScroll);
+    }
+
+    /**
+     * Show error screen
+     */
+    showErrorScreen(error) {
+        const errorDiv = document.createElement('div');
+        errorDiv.id = 'error-screen';
+        errorDiv.style.cssText = `
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--bg-primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+            color: white;
+            text-align: center;
+            padding: 20px;
+        `;
+
+        errorDiv.innerHTML = `
+            <div>
+                <h1 style="color: var(--accent-error); margin-bottom: 20px;">🚫 Ошибка загрузки</h1>
+                <p style="margin-bottom: 20px;">${error.message}</p>
+                <button onclick="location.reload()" style="
+                    background: var(--accent-primary);
+                    color: white;
+                    border: none;
+                    padding: 12px 24px;
+                    border-radius: 8px;
+                    cursor: pointer;
+                    font-weight: 600;
+                ">Перезагрузить</button>
+            </div>
+        `;
+
+        document.body.appendChild(errorDiv);
     }
 }
 
-// Global instance
-window.MainManager = MainManager;
+// Initialize on DOM ready
+document.addEventListener('DOMContentLoaded', () => {
+    const bootstrap = new GeoWikiBootstrap();
+    bootstrap.init();
+});
 
-// Export init function for app.js
-window.initMain = () => {
-    const mainManager = new MainManager();
-    mainManager.init();
-    window.mainManager = mainManager;
-};
+// Fallback for older browsers
+window.addEventListener('load', () => {
+    if (!document.querySelector('#error-screen')) {
+        const bootstrap = new GeoWikiBootstrap();
+        bootstrap.init();
+    }
+});
+

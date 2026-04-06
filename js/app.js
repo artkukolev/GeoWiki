@@ -1,253 +1,170 @@
 /**
- * GEOWIKI App Controller
- * Main application entry point and module orchestrator
+ * Main GeoWiki Application Class
+ * Orchestrates the entire application
  */
 
 class GeoWikiApp {
     constructor() {
-        this.modules = {};
-        this.initialized = false;
+        this.currentView = 'landing';
+        this.userProgress = this.loadProgress();
+    }
+
+    /**
+     * Start the application
+     */
+    async start() {
+        console.log('🌍 GeoWiki App starting...');
+
+        // Setup navigation
+        this.setupNavigation();
+
+        // Setup continent selection
+        this.setupContinentSelection();
+
+        // Show initial view
+        this.showView('landing');
+
+        console.log('✅ GeoWiki App started');
+    }
+
+    /**
+     * Setup navigation
+     */
+    setupNavigation() {
+        const navLinks = document.querySelectorAll('.nav-link');
+        navLinks.forEach(link => {
+            link.addEventListener('click', (e) => {
+                e.preventDefault();
+                const href = link.getAttribute('href');
+                if (href.startsWith('#')) {
+                    // Scroll to section
+                    const target = document.querySelector(href);
+                    if (target) {
+                        target.scrollIntoView({ behavior: 'smooth' });
+                    }
+                } else {
+                    // Navigate to page
+                    window.location.href = href;
+                }
+            });
+        });
+    }
+
+    /**
+     * Setup continent selection
+     */
+    setupContinentSelection() {
+        const continentCards = document.querySelectorAll('.continent-card');
+        continentCards.forEach(card => {
+            card.addEventListener('click', () => {
+                const continent = card.dataset.continent;
+                this.navigateToMap(continent);
+            });
+        });
+    }
+
+    /**
+     * Navigate to map with continent filter
+     */
+    navigateToMap(continent) {
+        window.location.href = `map.html?continent=${continent}`;
+    }
+
+    /**
+     * Show specific view
+     */
+    showView(view) {
+        this.currentView = view;
+        // Update UI based on view if needed
+    }
+
+    /**
+     * Load user progress from localStorage
+     */
+    loadProgress() {
+        const progress = localStorage.getItem('geoWikiProgress');
+        return progress ? JSON.parse(progress) : {
+            exploredCountries: [],
+            completedLevels: [],
+            xp: 0,
+            achievements: []
+        };
+    }
+
+    /**
+     * Save user progress
+     */
+    saveProgress() {
+        localStorage.setItem('geoWikiProgress', JSON.stringify(this.userProgress));
+    }
+
+    /**
+     * Update user progress
+     */
+    updateProgress(type, data) {
+        switch (type) {
+            case 'explore_country':
+                if (!this.userProgress.exploredCountries.includes(data.countryId)) {
+                    this.userProgress.exploredCountries.push(data.countryId);
+                    this.userProgress.xp += 10;
+                }
+                break;
+            case 'complete_level':
+                if (!this.userProgress.completedLevels.includes(data.levelId)) {
+                    this.userProgress.completedLevels.push(data.levelId);
+                    this.userProgress.xp += 50;
+                }
+                break;
+        }
+        this.saveProgress();
+        this.checkAchievements();
+    }
+
+    /**
+     * Check for new achievements
+     */
+    checkAchievements() {
+        const achievements = [];
+
+        // Explorer achievement
+        if (this.userProgress.exploredCountries.length >= 5 && !this.userProgress.achievements.includes('explorer')) {
+            achievements.push('explorer');
+        }
+
+        // Scholar achievement
+        if (this.userProgress.completedLevels.length >= 1 && !this.userProgress.achievements.includes('scholar')) {
+            achievements.push('scholar');
+        }
+
+        // Add new achievements
+        achievements.forEach(achievement => {
+            this.userProgress.achievements.push(achievement);
+            this.showAchievementNotification(achievement);
+        });
+
+        if (achievements.length > 0) {
+            this.saveProgress();
+        }
+    }
+
+    /**
+     * Show achievement notification
+     */
+    showAchievementNotification(achievement) {
+        // Simple notification - could be enhanced
+        console.log(`🏆 Achievement unlocked: ${achievement}`);
     }
 
     /**
      * Initialize the application
      */
     async init() {
-        if (this.initialized) return;
-
-        try {
-            console.log('🚀 Initializing GEOWIKI...');
-
-            // Initialize core modules
-            await this.initModules();
-
-            // Setup global event listeners
-            this.setupGlobalEvents();
-
-            // Start animations and interactions
-            this.startApp();
-
-            this.initialized = true;
-            console.log('✅ GEOWIKI initialized successfully');
-
-        } catch (error) {
-            console.error('❌ Failed to initialize GEOWIKI:', error);
-        }
-    }
-
-    /**
-     * Initialize all application modules
-     */
-    async initModules() {
-        const currentScript = document.currentScript || document.querySelector('script[src*="/js/app.js"]');
-        const appBaseUrl = currentScript ? new URL('.', currentScript.src).href : `${window.location.origin}/js/`;
-
-        const modules = [
-            { name: 'progress', path: './progress.js', class: 'ProgressManager' },
-            { name: 'modal', path: './modal.js', class: 'ModalManager' },
-            { name: 'quiz', path: './quiz.js', class: 'QuizManager' },
-            { name: 'filter', path: './filter.js', class: 'FilterManager' },
-            { name: 'miniGame', path: './mini-game.js', class: 'MiniGameManager' }
-        ];
-
-        for (const module of modules) {
-            if (window[module.class]) {
-                this.modules[module.name] = window[module.class];
-                console.log(`✅ Module ${module.name} already available`);
-                continue;
-            }
-
-            try {
-                const moduleScript = document.createElement('script');
-                moduleScript.src = new URL(module.path, appBaseUrl).href;
-                moduleScript.async = false;
-                document.head.appendChild(moduleScript);
-
-                await this.waitForModule(module.class);
-                this.modules[module.name] = window[module.class];
-                console.log(`✅ Module ${module.name} loaded`);
-
-            } catch (error) {
-                console.warn(`⚠️ Module ${module.name} failed to load:`, error);
-            }
-        }
-    }
-
-    /**
-     * Wait for a module class to be available globally
-     */
-    waitForModule(className, timeout = 5000) {
-        return new Promise((resolve, reject) => {
-            const startTime = Date.now();
-
-            const checkModule = () => {
-                if (window[className]) {
-                    resolve(window[className]);
-                } else if (Date.now() - startTime > timeout) {
-                    reject(new Error(`Module ${className} not found within ${timeout}ms`));
-                } else {
-                    setTimeout(checkModule, 100);
-                }
-            };
-
-            checkModule();
-        });
-    }
-
-    /**
-     * Setup global event listeners
-     */
-    setupGlobalEvents() {
-        // Handle page visibility changes
-        document.addEventListener('visibilitychange', () => {
-            if (document.hidden) {
-                this.pauseApp();
-            } else {
-                this.resumeApp();
-            }
-        });
-
-        // Handle window resize
-        window.addEventListener('resize', this.debounce(() => {
-            this.handleResize();
-        }, 250));
-
-        // Handle navigation
-        document.addEventListener('click', (e) => {
-            if (e.target.matches('[data-nav]')) {
-                e.preventDefault();
-                this.navigate(e.target.dataset.nav);
-            }
-        });
-    }
-
-    /**
-     * Start the application
-     */
-    startApp() {
-        // Initialize main.js functionality
-        if (window.initMain) {
-            window.initMain();
-        }
-
-        // Start scroll animations
-        this.initScrollAnimations();
-
-        // Initialize progress tracking
-        if (window.ProgressManager) {
-            this.modules.progress = new window.ProgressManager();
-        }
-
-        // Initialize modal system
-        if (window.ModalManager) {
-            this.modules.modal = new window.ModalManager();
-        }
-
-        // Initialize quiz system if on level page
-        if (window.QuizManager && document.querySelector('.quiz-container')) {
-            this.modules.quiz = new window.QuizManager();
-        }
-
-        // Initialize filter system if on symbols page
-        if (window.FilterManager && document.querySelector('.filters-section')) {
-            this.modules.filter = new window.FilterManager();
-        }
-
-        // Initialize mini-game if present
-        if (window.MiniGameManager && document.querySelector('.mini-game-section')) {
-            this.modules.miniGame = new window.MiniGameManager();
-        }
-    }
-
-    /**
-     * Initialize scroll animations
-     */
-    initScrollAnimations() {
-        const observerOptions = {
-            threshold: 0.1,
-            rootMargin: '0px 0px -50px 0px'
-        };
-
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.classList.add('reveal');
-                }
-            });
-        }, observerOptions);
-
-        // Observe all elements with reveal class
-        document.querySelectorAll('.reveal').forEach(el => {
-            observer.observe(el);
-        });
-    }
-
-    /**
-     * Handle window resize
-     */
-    handleResize() {
-        // Update any responsive elements
-        if (this.modules.modal) {
-            this.modules.modal.updatePosition();
-        }
-    }
-
-    /**
-     * Navigate to a different section
-     */
-    navigate(target) {
-        const sections = document.querySelectorAll('section');
-        sections.forEach(section => section.classList.remove('active'));
-
-        const targetSection = document.getElementById(target);
-        if (targetSection) {
-            targetSection.classList.add('active');
-            targetSection.scrollIntoView({ behavior: 'smooth' });
-        }
-    }
-
-    /**
-     * Pause application (when tab is hidden)
-     */
-    pauseApp() {
-        // Pause animations, timers, etc.
-        document.body.classList.add('paused');
-    }
-
-    /**
-     * Resume application (when tab becomes visible)
-     */
-    resumeApp() {
-        // Resume animations, timers, etc.
-        document.body.classList.remove('paused');
-    }
-
-    /**
-     * Utility: Debounce function
-     */
-    debounce(func, wait) {
-        let timeout;
-        return function executedFunction(...args) {
-            const later = () => {
-                clearTimeout(timeout);
-                func(...args);
-            };
-            clearTimeout(timeout);
-            timeout = setTimeout(later, wait);
-        };
-    }
-
-    /**
-     * Get application state
-     */
-    getState() {
-        return {
-            initialized: this.initialized,
-            modules: Object.keys(this.modules),
-            currentPage: window.location.pathname
-        };
+        await this.start();
     }
 }
+
+// Export for global use
+window.GeoWikiApp = GeoWikiApp;
 
 // Global app instance
 window.GeoWikiApp = new GeoWikiApp();
