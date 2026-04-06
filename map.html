@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Интерактивная Карта - GeoWiki</title>
+    <link rel="stylesheet" href="css/design-system.css?v=20260407">
+    <link rel="stylesheet" href="css/style.css?v=20260407">
+    <!-- Leaflet CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        #map {
+            width: 100%;
+            height: calc(100vh - 120px);
+            position: relative;
+        }
+
+        .map-container {
+            position: relative;
+            height: 100vh;
+            background: var(--bg-dark);
+        }
+
+        .map-header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            padding: var(--spacing-lg) var(--spacing-xl);
+            background: rgba(11, 18, 32, 0.95);
+            border-bottom: 1px solid rgba(77, 163, 255, 0.2);
+            backdrop-filter: blur(10px);
+            z-index: 50;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .map-header h1 {
+            font-size: var(--text-2xl);
+            font-weight: 900;
+            color: white;
+            margin: 0;
+            background: var(--primary-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .back-button {
+            display: inline-flex;
+            align-items: center;
+            gap: var(--spacing-sm);
+            color: var(--primary-color);
+            text-decoration: none;
+            font-weight: 700;
+            padding: var(--spacing-md) var(--spacing-lg);
+            border-radius: var(--border-radius-lg);
+            background: rgba(77, 163, 255, 0.1);
+            border: 1px solid rgba(77, 163, 255, 0.3);
+            transition: all 0.3s ease;
+        }
+
+        .back-button:hover {
+            background: rgba(77, 163, 255, 0.2);
+            border-color: rgba(77, 163, 255, 0.6);
+        }
+
+        .country-popup {
+            background: var(--bg-dark-2);
+            color: white;
+            border: 1px solid rgba(77, 163, 255, 0.3);
+            border-radius: var(--border-radius-lg);
+            padding: 0 !important;
+        }
+
+        .country-popup .leaflet-popup-content {
+            margin: 0 !important;
+            width: auto !important;
+            max-width: 300px;
+            padding: var(--spacing-lg) !important;
+            font-family: var(--font-family-primary);
+        }
+
+        .country-popup h3 {
+            font-size: var(--text-xl);
+            font-weight: 800;
+            margin: 0 0 var(--spacing-sm) 0;
+            background: var(--primary-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .country-popup p {
+            margin: var(--spacing-sm) 0;
+            font-size: var(--text-sm);
+            color: var(--text-secondary);
+        }
+
+        .country-popup strong {
+            color: var(--primary-color);
+        }
+
+        .country-popup .explore-btn {
+            display: inline-block;
+            margin-top: var(--spacing-lg);
+            padding: var(--spacing-md) var(--spacing-lg);
+            background: var(--primary-gradient);
+            color: white;
+            text-decoration: none;
+            border-radius: var(--border-radius-lg);
+            font-weight: 700;
+            font-size: var(--text-sm);
+            transition: all 0.3s ease;
+        }
+
+        .country-popup .explore-btn:hover {
+            box-shadow: 0 0 30px rgba(77, 163, 255, 0.5);
+        }
+
+        .leaflet-popup-close-button {
+            color: var(--text-secondary) !important;
+        }
+
+        .leaflet-popup-close-button:hover {
+            color: var(--primary-color) !important;
+        }
+
+        /* Custom marker styles */
+        .country-marker {
+            background: var(--primary-gradient);
+            border: 2px solid white;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2em;
+            box-shadow: 0 0 15px rgba(77, 163, 255, 0.5);
+            cursor: pointer;
+        }
+
+        .leaflet-container {
+            font-family: var(--font-family-primary);
+        }
+
+        /* Attribution */
+        .leaflet-attribution {
+            background: rgba(11, 18, 32, 0.8) !important;
+            color: var(--text-secondary) !important;
+            backdrop-filter: blur(10px);
+        }
+
+        .leaflet-attribution a {
+            color: var(--primary-color) !important;
+        }
+
+        /* Control styles */
+        .leaflet-control-zoom {
+            border: 1px solid rgba(77, 163, 255, 0.3) !important;
+            border-radius: var(--border-radius-lg) !important;
+            background: rgba(11, 18, 32, 0.9) !important;
+            backdrop-filter: blur(10px);
+        }
+
+        .leaflet-control-zoom a {
+            background: transparent !important;
+            color: var(--primary-color) !important;
+            border-bottom: 1px solid rgba(77, 163, 255, 0.2) !important;
+            font-weight: 700;
+        }
+
+        .leaflet-control-zoom a:hover {
+            background: rgba(77, 163, 255, 0.2) !important;
+        }
+
+        .leaflet-control-zoom a:last-child {
+            border-bottom: none !important;
+        }
+    </style>
+</head>
+<body>
+    <div class="map-container">
+        <div class="map-header">
+            <h1>🗺️ Интерактивная Карта Мира</h1>
+            <a href="index.html" class="back-button">← Вернуться</a>
+        </div>
+        <div id="map"></div>
+    </div>
+
+    <!-- Leaflet JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
+    <script src="js/countries-data.js?v=20260407"></script>
+    <script>
+        // Initialize map
+        const map = L.map('map').setView([20, 0], 3);
+
+        // Add tile layer
+        L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
+            attribution: '&copy; OpenStreetMap contributors &copy; CARTO',
+            maxZoom: 19,
+            className: 'map-tiles'
+        }).addTo(map);
+
+        // Add custom CSS to tiles
+        const style = document.createElement('style');
+        style.textContent = `
+            .leaflet-tile {
+                filter: brightness(0.9) saturate(0.8);
+            }
+        `;
+        document.head.appendChild(style);
+
+        // Add country markers
+        countriesData.forEach(country => {
+            const marker = L.marker(country.coords, {
+                icon: L.divIcon({
+                    className: 'country-marker',
+                    html: country.flag,
+                    iconSize: [40, 40],
+                    iconAnchor: [20, 20],
+                    popupAnchor: [0, -20]
+                })
+            }).addTo(map);
+
+            // Create popup content
+            const popupContent = `
+                <div class="country-popup">
+                    <h3>${country.flag} ${country.name}</h3>
+                    <p><strong>Столица:</strong> ${country.capital}</p>
+                    <p><strong>Население:</strong> ${country.population}</p>
+                    <p><strong>Площадь:</strong> ${country.area}</p>
+                    <p><strong>Климат:</strong> ${country.climate}</p>
+                    <p style="margin-top: var(--spacing-lg); font-style: italic;">📍 ${country.fact}</p>
+                    <a href="encyclopedia.html?country=${country.id}" class="explore-btn">Изучить подробнее →</a>
+                </div>
+            `;
+
+            marker.bindPopup(popupContent, {
+                maxWidth: 350,
+                className: 'country-popup'
+            });
+
+            // Highlight on hover
+            marker.on('mouseover', function() {
+                this.setOpacity(1);
+            });
+
+            marker.on('mouseout', function() {
+                this.setOpacity(0.8);
+            });
+        });
+
+        // Add intro message
+        const intro = document.createElement('div');
+        intro.style.cssText = `
+            position: absolute;
+            top: 120px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(77, 163, 255, 0.1);
+            border: 1px solid rgba(77, 163, 255, 0.3);
+            border-radius: 12px;
+            padding: 16px 24px;
+            color: white;
+            font-weight: 600;
+            backdrop-filter: blur(10px);
+            z-index: 40;
+            max-width: 500px;
+            text-align: center;
+        `;
+        intro.textContent = '🌍 Кликните на страну, чтобы узнать о ней больше';
+        document.querySelector('.map-container').appendChild(intro);
+
+        // Fade out intro
+        setTimeout(() => {
+            intro.style.transition = 'opacity 0.5s ease';
+            intro.style.opacity = '0';
+            setTimeout(() => intro.remove(), 500);
+        }, 5000);
+    </script>
+    <script src="js/app.js?v=20260407" type="module"></script>
+    <script src="js/main.js?v=20260407"></script>
+    <script src="js/progress.js?v=20260407"></script>
+</body>
+</html>

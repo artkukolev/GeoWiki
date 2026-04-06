@@ -47,8 +47,9 @@
                 </div>
                 <ul class="nav-links">
                     <li><a href="#levels" class="nav-link">Уровни</a></li>
+                    <li><a href="map.html" class="nav-link">Карта</a></li>
+                    <li><a href="profile.html" class="nav-link">Профиль</a></li>
                     <li><a href="symbols/index.html" class="nav-link">Знаки</a></li>
-                    <li><a href="#progress" class="nav-link">Прогресс</a></li>
                 </ul>
             </div>
         </nav>
@@ -59,24 +60,24 @@
         <section id="hero" class="hero-section">
             <div class="hero-content">
                 <h1 class="hero-title">
-                    <span class="hero-title-main">Стань Географом</span>
-                    <span class="hero-title-sub">с GeoWiki</span>
+                    <span class="hero-title-main">Изучай географию</span>
+                    <span class="hero-title-sub">интерактивно</span>
                 </h1>
-                <p class="hero-subtitle">Интерактивное путешествие по миру географии. От базовых карт до профессиональных навыков навигации.</p>
+                <p class="hero-subtitle">Карты, страны и стратегия. От начинающего путешественника до профессионального географа.</p>
                 <div class="hero-cta">
-                    <a href="#levels" class="cta-button">
-                        <span class="cta-text">Начать Путешествие</span>
+                    <a href="#explore" class="cta-button">
+                        <span class="cta-text">🚀 Начать сейчас</span>
                         <span class="cta-arrow">→</span>
                     </a>
                 </div>
                 <div class="hero-stats">
                     <div class="stat">
-                        <span class="stat-number">5</span>
-                        <span class="stat-label">Уровней</span>
+                        <span class="stat-number">50+</span>
+                        <span class="stat-label">Стран</span>
                     </div>
                     <div class="stat">
-                        <span class="stat-number">50+</span>
-                        <span class="stat-label">Знаков</span>
+                        <span class="stat-number">5</span>
+                        <span class="stat-label">Уровней</span>
                     </div>
                     <div class="stat">
                         <span class="stat-number">∞</span>
@@ -84,12 +85,40 @@
                     </div>
                 </div>
             </div>
-            <div class="hero-visual">
-                <div class="floating-elements">
-                    <div class="floating-card card-1">🗺️</div>
-                    <div class="floating-card card-2">🏔️</div>
-                    <div class="floating-card card-3">🌊</div>
-                    <div class="floating-card card-4">🏙️</div>
+        </section>
+
+        <!-- Quick Start Section -->
+        <section id="explore" class="explore-section">
+            <div class="section-container">
+                <h2 class="section-title">Начни своё путешествие</h2>
+                <p class="section-subtitle">Выбери интересующий тебя материк</p>
+                <div class="continents-grid">
+                    <div class="continent-card" data-continent="europe">
+                        <div class="continent-icon">🇪🇺</div>
+                        <h3>Европа</h3>
+                        <p>15 стран</p>
+                    </div>
+                    <div class="continent-card" data-continent="asia">
+                        <div class="continent-icon">🏯</div>
+                        <h3>Азия</h3>
+                        <p>20 стран</p>
+                    </div>
+                    <div class="continent-card" data-continent="africa">
+                        <div class="continent-icon">🦁</div>
+                        <h3>Африка</h3>
+                        <p>10 стран</p>
+                    </div>
+                    <div class="continent-card" data-continent="americas">
+                        <div class="continent-icon">🗽</div>
+                        <h3>Северная Америка</h3>
+                        <p>5 стран</p>
+                    </div>
+                </div>
+                <div class="map-cta">
+                    <a href="map.html" class="map-button">
+                        <span>🗺️ Открыть интерактивную карту</span>
+                        <span class="btn-arrow">→</span>
+                    </a>
                 </div>
             </div>
         </section>
@@ -261,5 +290,16 @@
     <script src="js/main.js?v=20260407"></script>
     <script src="js/progress.js?v=20260407"></script>
     <script src="js/mini-game.js?v=20260407"></script>
+    <script src="js/countries-data.js?v=20260407"></script>
+    <script>
+        // Handle continent card clicks
+        document.querySelectorAll('.continent-card').forEach(card => {
+            card.addEventListener('click', function() {
+                const continent = this.dataset.continent;
+                console.log('Selected continent:', continent);
+                // Can add filtering logic here in future
+            });
+        });
+    </script>
 </body>
 </html>

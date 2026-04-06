@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Энциклопедия - GeoWiki</title>
+    <link rel="stylesheet" href="css/design-system.css?v=20260407">
+    <link rel="stylesheet" href="css/style.css?v=20260407">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        body {
+            padding-top: 80px;
+        }
+
+        .encyclopedia-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: var(--spacing-2xl) var(--spacing-xl);
+            min-height: 100vh;
+        }
+
+        .back-nav {
+            display: inline-flex;
+            align-items: center;
+            gap: var(--spacing-sm);
+            color: var(--primary-color);
+            text-decoration: none;
+            font-weight: 700;
+            margin-bottom: var(--spacing-3xl);
+            transition: all 0.3s ease;
+        }
+
+        .back-nav:hover {
+            gap: var(--spacing-md);
+            color: var(--secondary-color);
+        }
+
+        .country-header {
+            display: grid;
+            grid-template-columns: 200px 1fr;
+            gap: var(--spacing-2xl);
+            margin-bottom: var(--spacing-3xl);
+            align-items: start;
+        }
+
+        .country-flag-card {
+            width: 200px;
+            height: 200px;
+            background: linear-gradient(135deg, rgba(77, 163, 255, 0.15) 0%, rgba(124, 255, 178, 0.1) 100%);
+            border: 2px solid rgba(77, 163, 255, 0.3);
+            border-radius: var(--border-radius-2xl);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 5rem;
+            backdrop-filter: blur(10px);
+        }
+
+        .country-info h1 {
+            font-size: var(--text-5xl);
+            font-weight: 900;
+            margin-bottom: var(--spacing-lg);
+            background: var(--primary-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .country-info p {
+            font-size: var(--text-lg);
+            color: var(--text-secondary);
+            margin: 0;
+            line-height: 1.7;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: var(--spacing-xl);
+            margin-bottom: var(--spacing-3xl);
+        }
+
+        .stat-card {
+            padding: var(--spacing-2xl);
+            background: linear-gradient(135deg, rgba(77, 163, 255, 0.1) 0%, rgba(124, 255, 178, 0.05) 100%);
+            border: 1px solid rgba(77, 163, 255, 0.2);
+            border-radius: var(--border-radius-xl);
+            backdrop-filter: blur(10px);
+        }
+
+        .stat-card strong {
+            display: block;
+            color: var(--primary-color);
+            font-size: var(--text-sm);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: var(--spacing-sm);
+        }
+
+        .stat-card span {
+            display: block;
+            font-size: var(--text-2xl);
+            font-weight: 800;
+            color: white;
+        }
+
+        .detail-section {
+            margin-bottom: var(--spacing-3xl);
+        }
+
+        .detail-section h2 {
+            font-size: var(--text-3xl);
+            font-weight: 900;
+            margin-bottom: var(--spacing-lg);
+            color: white;
+        }
+
+        .detail-section p {
+            font-size: var(--text-lg);
+            color: var(--text-secondary);
+            line-height: 2;
+            margin: 0;
+        }
+
+        .interesting-fact {
+            padding: var(--spacing-2xl);
+            background: linear-gradient(135deg, rgba(124, 255, 178, 0.1) 0%, rgba(77, 163, 255, 0.05) 100%);
+            border-left: 4px solid var(--secondary-color);
+            border-radius: var(--border-radius-xl);
+            margin: var(--spacing-2xl) 0;
+            font-size: var(--text-lg);
+            font-style: italic;
+            color: white;
+        }
+
+        .cta-buttons {
+            display: flex;
+            gap: var(--spacing-xl);
+            margin-top: var(--spacing-3xl);
+            flex-wrap: wrap;
+        }
+
+        .cta-buttons a {
+            display: inline-flex;
+            align-items: center;
+            gap: var(--spacing-md);
+            padding: var(--spacing-lg) var(--spacing-2xl);
+            border-radius: var(--border-radius-xl);
+            font-weight: 800;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        .btn-explore {
+            background: var(--primary-gradient);
+            color: white;
+            box-shadow: 0 0 40px rgba(77, 163, 255, 0.3);
+        }
+
+        .btn-explore:hover {
+            box-shadow: 0 0 60px rgba(77, 163, 255, 0.5);
+            transform: translateY(-2px);
+        }
+
+        .btn-map {
+            background: rgba(77, 163, 255, 0.1);
+            color: var(--primary-color);
+            border: 1px solid rgba(77, 163, 255, 0.3);
+        }
+
+        .btn-map:hover {
+            background: rgba(77, 163, 255, 0.2);
+            border-color: rgba(77, 163, 255, 0.6);
+        }
+
+        .loading {
+            text-align: center;
+            padding: var(--spacing-4xl);
+            font-size: var(--text-2xl);
+            color: var(--text-secondary);
+        }
+
+        @media (max-width: 768px) {
+            .country-header {
+                grid-template-columns: 150px 1fr;
+            }
+
+            .country-flag-card {
+                width: 150px;
+                height: 150px;
+                font-size: 3rem;
+            }
+
+            .country-info h1 {
+                font-size: var(--text-4xl);
+            }
+
+            .cta-buttons {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <nav class="glass-nav">
+            <div class="nav-container">
+                <div class="logo">
+                    <span class="logo-icon">🌍</span>
+                    <span class="logo-text">GeoWiki</span>
+                </div>
+                <ul class="nav-links">
+                    <li><a href="index.html" class="nav-link">Главная</a></li>
+                    <li><a href="map.html" class="nav-link">Карта</a></li>
+                    <li><a href="index.html#levels" class="nav-link">Уровни</a></li>
+                </ul>
+            </div>
+        </nav>
+    </header>
+
+    <div class="encyclopedia-container">
+        <a href="map.html" class="back-nav">← Вернуться на карту</a>
+        
+        <div id="content" class="loading">
+            Загрузка информации о стране...
+        </div>
+    </div>
+
+    <script src="js/countries-data.js?v=20260407"></script>
+    <script src="js/app.js?v=20260407" type="module"></script>
+    <script src="js/main.js?v=20260407"></script>
+    <script src="js/progress.js?v=20260407"></script>
+    <script>
+        // Get country ID from URL
+        const params = new URLSearchParams(window.location.search);
+        const countryId = params.get('country');
+
+        // Find country in database
+        const country = countriesData.find(c => c.id === countryId);
+
+        if (country) {
+            const content = document.getElementById('content');
+            content.innerHTML = `
+                <a href="map.html" class="back-nav">← Вернуться на карту</a>
+                
+                <div class="country-header">
+                    <div class="country-flag-card">${country.flag}</div>
+                    <div class="country-info">
+                        <h1>${country.name}</h1>
+                        <p>Столица: <strong>${country.capital}</strong></p>
+                        <p style="margin-top: var(--spacing-lg);">${country.fact}</p>
+                    </div>
+                </div>
+
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <strong>👥 Население</strong>
+                        <span>${country.population}</span>
+                    </div>
+                    <div class="stat-card">
+                        <strong>📏 Площадь</strong>
+                        <span>${country.area}</span>
+                    </div>
+                    <div class="stat-card">
+                        <strong>🌡️ Климат</strong>
+                        <span style="font-size: var(--text-lg);">${country.climate}</span>
+                    </div>
+                    <div class="stat-card">
+                        <strong>🗺️ Материк</strong>
+                        <span style="font-size: var(--text-lg);">
+                            ${country.continent === 'europe' ? '🇪🇺 Европа' :
+                              country.continent === 'asia' ? '🏯 Азия' :
+                              country.continent === 'africa' ? '🦁 Африка' :
+                              country.continent === 'americas' ? '🗽 Америка' : 'Другое'}
+                        </span>
+                    </div>
+                </div>
+
+                <div class="interesting-fact">
+                    <strong>💡 Интересный факт:</strong><br>${country.fact}
+                </div>
+
+                <div class="detail-section">
+                    <h2>О Стране</h2>
+                    <p>
+                        ${country.name} — удивительная страна с богатой историей и культурой. 
+                        Расположенная на материке ${country.continent === 'europe' ? 'Европа' :
+                                                      country.continent === 'asia' ? 'Азия' :
+                                                      country.continent === 'africa' ? 'Африка' :
+                                                      country.continent === 'americas' ? 'Северная Америка' : 'мире'},
+                        она занимает площадь ${country.area} и является домом для ${country.population} человек.
+                    </p>
+                </div>
+
+                <div class="detail-section">
+                    <h2>Климатические Условия</h2>
+                    <p>
+                        Климат в ${country.name} характеризуется как ${country.climate.toLowerCase()}. 
+                        Эти условия создали уникальные ландшафты и экосистемы, которые формируют жизнь местного населения.
+                    </p>
+                </div>
+
+                <div class="cta-buttons">
+                    <a href="map.html" class="btn-map">🗺️ На карту</a>
+                    <a href="index.html#levels" class="btn-explore">🎓 Начать обучение</a>
+                </div>
+            `;
+        } else {
+            document.getElementById('content').innerHTML = `
+                <div class="loading">
+                    <p>Страна не найдена</p>
+                    <a href="map.html" class="back-nav">← Вернуться на карту</a>
+                </div>
+            `;
+        }
+    </script>
+</body>
+</html>
