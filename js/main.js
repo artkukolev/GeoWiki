@@ -1,52 +1,58 @@
 /**
- * GeoWiki Bootstrap
- * Main application initializer with modular architecture
+ * GeoWiki Main Entry Point
+ * Это главный файл, который загружает новую архитектуру bootstrap
+ * 
+ * Порядок загрузки:
+ * 1. errorBoundary.js - глобальная защита от ошибок
+ * 2. dataLayer.js - управление данными
+ * 3. bootstrap.js - инициализация приложения
+ * 
+ * ДА! Я ПЕРЕПИСАЛ АРХИТЕКТУРУ!
+ * - Единая точка входа (bootstrap.js)
+ * - Изолированный data layer
+ * - Global error boundary
+ * - Timeout защита от бесконечной загрузки
+ * - Fallback UI
  */
 
-class GeoWikiBootstrap {
+// Инициализация приложения
+console.log('🌍 GeoWiki v2.0 - Loading new architecture...');
+
+// Планы инициализации для разных страниц
+const initPlans = {
+    landing: ['LandingManager', 'GeoWikiApp'],
+    map: ['MapManager'],
+    encyclopedia: ['EncyclopediaManager'],
+    quiz: ['QuizManager'],
+    profile: ['ProfileManager']
+};
+
+// Определить текущую страницу
+function getCurrentPage() {
+    const path = window.location.pathname;
+    
+    if (path.includes('map.html')) return 'map';
+    if (path.includes('encyclopedia.html')) return 'encyclopedia';
+    if (path.includes('quiz.html')) return 'quiz';
+    if (path.includes('profile.html')) return 'profile';
+    
+    return 'landing'; // По умолчанию
+}
+
+// Класс для инициализации приложения на текущей странице
+class AppInitializer {
     constructor() {
-        this.app = null;
-        this.mapManager = null;
-        this.encyclopediaManager = null;
-        this.profileManager = null;
-        this.landingManager = null;
-        this.progressManager = null;
-        this.modalManager = null;
+        this.currentPage = getCurrentPage();
+        console.log(`📄 Current page: ${this.currentPage}`);
     }
 
-    /**
-     * Main initialization sequence
-     */
     async init() {
         try {
-            console.log('🚀 Starting GeoWiki Bootstrap...');
-
-            // Sequential initialization to prevent race conditions
-            await this.loadDataLayer();
-            await this.initCoreSystems();
-            await this.initUILayer();
-            await this.startApp();
-
-            console.log('✅ GeoWiki Bootstrap completed successfully');
-        } catch (error) {
-            console.error('❌ Bootstrap failed:', error);
-            this.showErrorScreen(error);
-        }
-    }
-
-    /**
-     * Load data layer
-     */
-    async loadDataLayer() {
-        console.log('📊 Loading data layer...');
-
-        try {
-            // Load countries data
-            const countriesResponse = await fetch('./data/countries.json');
-            if (!countriesResponse.ok) throw new Error('Failed to load countries data');
-            window.countriesData = await countriesResponse.json();
-
-            // Load other data as needed
+            // Загрузить данные
+            console.log('📊 Loading data layer...');
+            const countries = await window.dataLayer.loadCountries();
+            window.countriesData = countries;
+            
             console.log('✅ Data layer loaded');
         } catch (error) {
             throw new Error(`Data loading failed: ${error.message}`);
