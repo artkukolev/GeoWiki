@@ -3,13 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>GeoWiki - Премиум Образовательный Сайт по Географии</title>
-    <meta name="description" content="Интерактивная образовательная платформа по географии с wow-эффектами. Изучайте условные знаки, проходите уровни и играйте в мини-игры.">
-    <meta name="keywords" content="география, образование, карты, условные знаки, обучение, интерактив, wow-эффекты">
+    <title>GeoWiki - Интерактивная карта географических объектов мира</title>
+    <meta name="description" content="GeoWiki — интерактивная карта географических объектов. Изучай, добавляй и исследуй географию мира. Исследуй страны, горы, реки и другие географические объекты.">
+    <meta name="keywords" content="география, карта мира, географические объекты, страны, интерактивная карта, образование">
     <meta name="author" content="GeoWiki Team">
     <meta name="robots" content="index, follow">
-    <meta property="og:title" content="GeoWiki - Премиум Образовательный Сайт по Географии">
-    <meta property="og:description" content="Интерактивная образовательная платформа по географии с wow-эффектами. Изучайте условные знаки, проходите уровни и играйте в мини-игры.">
+    <meta property="og:title" content="GeoWiki - Интерактивная карта географических объектов">
+    <meta property="og:description" content="Изучай, добавляй и исследуй географию мира. Интерактивная карта с информацией о странах, горах, реках и других географических объектах.">
     <meta property="og:image" content="https://your-domain.com/preview.jpg">
     <meta property="og:url" content="https://your-domain.com">
     <meta property="og:type" content="website">
@@ -23,14 +23,6 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 </head>
 <body>
-    <!-- Прелоадер -->
-    <div id="preloader">
-        <div class="preloader-content">
-            <div class="spinner"></div>
-            <p>Загрузка GeoWiki...</p>
-        </div>
-    </div>
-
     <!-- Custom Cursor -->
     <div class="cursor"></div>
     <div class="cursor-follower"></div>
@@ -60,19 +52,19 @@
         <section id="hero" class="hero-section">
             <div class="hero-content">
                 <h1 class="hero-title">
-                    <span class="hero-title-main">Изучай географию</span>
-                    <span class="hero-title-sub">интерактивно</span>
+                    <span class="hero-title-main">GeoWiki</span>
+                    <span class="hero-title-sub">Интерактивная карта географических объектов</span>
                 </h1>
-                <p class="hero-subtitle">Карты, страны и стратегия. От начинающего путешественника до профессионального географа.</p>
+                <p class="hero-subtitle">Изучай, добавляй и исследуй географию мира. Откройте для себя страны, горы, реки и многое другое через интерактивную карту.</p>
                 <div class="hero-cta">
-                    <a href="#explore" class="cta-button">
-                        <span class="cta-text">🚀 Начать сейчас</span>
+                    <a href="map.html" class="cta-button">
+                        <span class="cta-text">🗺️ Открыть карту</span>
                         <span class="cta-arrow">→</span>
                     </a>
                 </div>
                 <div class="hero-stats">
                     <div class="stat">
-                        <span class="stat-number">50+</span>
+                        <span class="stat-number">195</span>
                         <span class="stat-label">Стран</span>
                     </div>
                     <div class="stat">
@@ -285,6 +277,26 @@
             </div>
         </div>
     </footer>
+
+    <!-- Error Container (Hidden by default) -->
+    <div id="error-container" class="error-container" style="display: none;">
+        <div class="error-content">
+            <div class="error-icon">⚠️</div>
+            <h2 class="error-title">Ошибка загрузки</h2>
+            <p class="error-message" id="error-message">Не удалось загрузить данные. Попробуйте ещё раз.</p>
+            <button id="error-retry-btn" class="error-retry-btn">🔄 Перезагрузить</button>
+        </div>
+    </div>
+
+    <!-- Empty State Container (Hidden by default) -->
+    <div id="empty-state" class="empty-state" style="display: none;">
+        <div class="empty-state-content">
+            <div class="empty-state-icon">🌍</div>
+            <h2 class="empty-state-title">Нет данных</h2>
+            <p class="empty-state-message">Эта страница кажется пустой.</p>
+            <a href="index.html" class="empty-state-button">← Вернуться на главную</a>
+        </div>
+    </div>
 
     <script src="js/main.js?v=20260407"></script>
 </body>

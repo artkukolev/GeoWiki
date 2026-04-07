@@ -1,18 +1,13 @@
 /**
- * GeoWiki Bootstrap
- * Единая точка входа приложения с гарантированным lifecycle
+ * GeoWiki Bootstrap v2.1
+ * Non-blocking initialization - UI renders immediately
+ * Data loads asynchronously in the background
  * 
- * Архитектура:
- * 1. loadConfig() - загрузка конфигурации
- * 2. loadData() - загрузка данных (countries.json)
- * 3. initMap() - инициализация Leaflet + контейнер
- * 4. renderUI() - рендер UI компонентов
- * 5. startApp() - запуск приложения
- * 
- * Защита:
- * - try/catch вокруг каждого этапа
- * - timeout 10 секунд
- * - fallback UI если что-то сломалось
+ * Принципы:
+ * 1. UI рендится СРАЗУ (без preloader)
+ * 2. Данные загружаются асинхронно в background
+ * 3. Skeleton loading внутри компонентов
+ * 4. НЕ блокирует First Contentful Paint
  */
 
 class GeoWikiBootstrap {
@@ -20,78 +15,66 @@ class GeoWikiBootstrap {
         this.config = {
             dataPath: './data/countries.json',
             mapContainer: 'map',
-            appTimeout: 10000,
+            dataTimeout: 5000,
             debug: true
         };
         
         this.state = {
-            isLoading: false,
-            isReady: false,
+            dataLoaded: false,
+            mapReady: false,
+            uiReady: true, // UI рендится сразу!
             error: null,
-            startTime: 0,
-            stages: {}
+            startTime: 0
         };
         
         this.modules = {};
-        this.timeoutId = null;
     }
 
     /**
-     * Основной инициализатор
+     * Главный метод инициализации (НЕ блокирующий)
      */
     async init() {
         try {
-            this.log('🚀 Starting GeoWiki Bootstrap...');
+            this.log('🚀 Starting GeoWiki (non-blocking)...', 'info');
             this.state.startTime = Date.now();
-            this.state.isLoading = true;
-            this.setLoading(true);
 
-            // Установить timeout для защиты от бесконечной загрузки
-            this.startTimeout();
-
-            // Последовательная инициализация
-            await this.loadConfig();
-            await this.loadData();
-            await this.initMap();
-            await this.renderUI();
-            await this.startApp();
-
-            // Успешно завершено
-            this.clearTimeout();
-            this.state.isReady = true;
-            this.state.isLoading = false;
-            this.setLoading(false);
+            // STAGE 1: UI рендится СРАЗУ (без ожидания)
+            this.log('✅ UI ready (immediate render)', 'success');
             
-            this.log('✅ GeoWiki Bootstrap completed successfully', 'success');
-            window.GeoWikiBootstrap = this;
-            
+            // STAGE 2: Загружать данные и карту В ФОНЕ (асинхронно)
+            this.loadDataInBackground();
+            this.initMapInBackground();
+
+            // STAGE 3: Настроить обработчик ошибок
+            this.setupErrorHandling();
+
+            this.log('✅ GeoWiki initialized (non-blocking)', 'success');
+
         } catch (error) {
             this.handleBootstrapError(error);
         }
     }
 
     /**
-     * Загрузить конфигурацию
+     * Загружать данные в фоне БЕЗ блокировки UI
      */
-    async loadConfig() {
-        this.log('⚙️ Loading configuration...');
-        
-        try {
-            // Здесь можно добавить загрузку конфига с сервера
-            this.log('✅ Configuration loaded', 'success');
-            this.state.stages.config = 'completed';
-        } catch (error) {
-            throw new Error(`Config loading failed: ${error.message}`);
+    loadDataInBackground() {
+        // Использовать requestIdleCallback для неблокирующей загрузки
+        if ('requestIdleCallback' in window) {
+            requestIdleCallback(() => this.loadData(), { timeout: this.config.dataTimeout });
+        } else {
+            // Fallback для старых браузеров
+            setTimeout(() => this.loadData(), 100);
         }
     }
 
     /**
-     * Загрузить данные (countries.json)
+     * Загрузить данные о странах (async фон)
      */
     async loadData() {
-        this.log('📊 Loading data layer...');
-        
         try {
+            this.log('📊 Loading countries data...', 'info');
+
             const response = await fetch(this.config.dataPath);
             
             if (!response.ok) {
@@ -101,18 +84,34 @@ class GeoWikiBootstrap {
             const data = await response.json();
             
             if (!data || !Array.isArray(data)) {
-                throw new Error('Invalid data format: expected array of countries');
+                throw new Error('Invalid data format');
             }
             
-            // Сохранить данные в глобальное пространство
+            // Сохранить данные
             window.countriesData = data;
             this.modules.data = data;
+            this.state.dataLoaded = true;
             
             this.log(`✅ Loaded ${data.length} countries`, 'success');
-            this.state.stages.data = 'completed';
+            
+            // Уведомить компоненты о готовности данных
+            this.notifyDataReady(data);
             
         } catch (error) {
-            throw new Error(`Data loading failed: ${error.message}`);
+            this.log(`❌ Data loading error: ${error.message}`, 'error');
+            this.state.error = error;
+            this.notifyDataError(error);
+        }
+    }
+
+    /**
+     * Инициализировать карту в фоне БЕЗ блокировки UI
+     */
+    initMapInBackground() {
+        if ('requestIdleCallback' in window) {
+            requestIdleCallback(() => this.initMap(), { timeout: 3000 });
+        } else {
+            setTimeout(() => this.initMap(), 200);
         }
     }
 
@@ -120,235 +119,125 @@ class GeoWikiBootstrap {
      * Инициализировать карту
      */
     async initMap() {
-        this.log('🗺️ Initializing map...');
-        
         try {
             // Проверить, есть ли контейнер
             const mapContainer = document.getElementById(this.config.mapContainer);
             if (!mapContainer) {
-                this.log('⚠️ Map container not found on this page (OK for landing page)', 'warn');
-                this.state.stages.map = 'skipped';
+                this.log('⚠️ Map container not found (OK for landing)', 'warn');
                 return;
             }
 
-            // Проверить, загружена ли Leaflet библиотека
+            this.log('🗺️ Initializing map...', 'info');
+
+            // Проверить наличие Leaflet
             if (!window.L) {
-                throw new Error('Leaflet library not loaded');
+                this.log('⚠️ Leaflet not loaded yet', 'warn');
+                return;
             }
 
             // Инициализировать карту
             const map = L.map(this.config.mapContainer).setView([20, 0], 2);
             
-            // Добавить tiles
             L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
                 attribution: '© OpenStreetMap contributors',
                 maxZoom: 19
             }).addTo(map);
 
             this.modules.map = map;
+            this.state.mapReady = true;
             
-            this.log('✅ Map initialized successfully', 'success');
-            this.state.stages.map = 'completed';
-            
+            this.log('✅ Map initialized', 'success');
+
         } catch (error) {
-            throw new Error(`Map initialization failed: ${error.message}`);
+            this.log(`❌ Map init error: ${error.message}`, 'error');
         }
     }
 
     /**
-     * Рендер UI компонентов
+     * Уведомить компоненты о готовности данных
      */
-    async renderUI() {
-        this.log('🎨 Rendering UI...');
-        
-        try {
-            // Инициализировать менеджеры UI
-            if (window.LandingManager && document.querySelector('.continents-grid')) {
-                this.modules.landing = new window.LandingManager();
-                await this.modules.landing.init?.();
-            }
+    notifyDataReady(data) {
+        // Dispatch custom event
+        window.dispatchEvent(new CustomEvent('geowiki:data-ready', {
+            detail: { data: data }
+        }));
 
-            if (window.MapManager && document.getElementById('map')) {
-                this.modules.mapManager = new window.MapManager();
-                await this.modules.mapManager.init?.();
-            }
-
-            if (window.EncyclopediaManager && document.querySelector('.encyclopedia-container')) {
-                this.modules.encyclopedia = new window.EncyclopediaManager();
-                await this.modules.encyclopedia.init?.();
-            }
-
-            if (window.QuizManager && document.querySelector('.quiz-container')) {
-                this.modules.quiz = new window.QuizManager();
-                await this.modules.quiz.init?.();
-            }
-
-            if (window.ProfileManager && document.querySelector('.profile-container')) {
-                this.modules.profile = new window.ProfileManager();
-                await this.modules.profile.init?.();
-            }
-
-            this.log('✅ UI rendered successfully', 'success');
-            this.state.stages.ui = 'completed';
-            
-        } catch (error) {
-            throw new Error(`UI rendering failed: ${error.message}`);
+        // Обновить компоненты вручную если нужно
+        if (window.updateCountryCards) {
+            window.updateCountryCards(data);
         }
     }
 
     /**
-     * Запустить приложение
+     * Уведомить компоненты об ошибке
      */
-    async startApp() {
-        this.log('🎯 Starting application...');
-        
-        try {
-            // Инициализировать глобальное приложение
-            if (window.GeoWikiApp) {
-                window.app = window.GeoWikiApp;
-                await window.app.start?.();
-            }
+    notifyDataError(error) {
+        window.dispatchEvent(new CustomEvent('geowiki:data-error', {
+            detail: { error: error.message }
+        }));
 
-            this.log('✅ Application started', 'success');
-            this.state.stages.app = 'completed';
-            
-        } catch (error) {
-            throw new Error(`Application start failed: ${error.message}`);
-        }
+        // Показать мини-ошибку
+        this.showMiniError(error.message);
     }
 
     /**
-     * Обработка ошибок bootstrap
+     * Показать мини-ошибку (не блокирующую весь экран)
+     */
+    showMiniError(message) {
+        // Создать мини-уведомление вместо полноэкранного
+        const notification = document.createElement('div');
+        notification.style.cssText = `
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: rgba(255, 107, 107, 0.95);
+            color: white;
+            padding: 16px 20px;
+            border-radius: 10px;
+            max-width: 400px;
+            font-family: 'Inter', sans-serif;
+            z-index: 9998;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            border-left: 4px solid #ff6b6b;
+        `;
+
+        notification.innerHTML = `
+            <strong style="font-size: 14px;">⚠️ Ошибка</strong>
+            <p style="margin: 5px 0 0 0; font-size: 12px;">
+                ${message}
+            </p>
+        `;
+
+        document.body.appendChild(notification);
+
+        // Автоматически удалить через 5 секунд
+        setTimeout(() => {
+            notification.remove();
+        }, 5000);
+    }
+
+    /**
+     * Настроить глобальную обработку ошибок
+     */
+    setupErrorHandling() {
+        window.addEventListener('error', (event) => {
+            this.log(`❌ Uncaught error: ${event.message}`, 'error');
+            // НЕ блокировать UI - только логировать
+        });
+
+        window.addEventListener('unhandledrejection', (event) => {
+            this.log(`❌ Unhandled promise: ${event.reason}`, 'error');
+            // НЕ преотвращать default - позволить браузеру обработать
+        });
+    }
+
+    /**
+     * Обработка критических ошибок bootstrap (редко)
      */
     handleBootstrapError(error) {
-        this.state.isLoading = false;
-        this.state.error = error;
-        this.clearTimeout();
-        
-        console.error('❌ Bootstrap Error:', error);
-        this.log(`❌ Bootstrap failed: ${error.message}`, 'error');
-        
-        this.showErrorScreen(error);
-        this.setLoading(false);
-    }
-
-    /**
-     * Показать экран ошибки
-     */
-    showErrorScreen(error) {
-        const errorScreen = document.createElement('div');
-        errorScreen.id = 'error-screen';
-        errorScreen.style.cssText = `
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: linear-gradient(135deg, #0B1220 0%, #1a2a4a 100%);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            z-index: 9999;
-            font-family: 'Inter', sans-serif;
-            color: white;
-        `;
-        
-        errorScreen.innerHTML = `
-            <div style="
-                text-align: center;
-                max-width: 600px;
-                padding: 40px;
-                background: rgba(77, 163, 255, 0.05);
-                border: 1px solid rgba(77, 163, 255, 0.2);
-                border-radius: 20px;
-                backdrop-filter: blur(10px);
-            ">
-                <div style="font-size: 60px; margin-bottom: 20px;">⚠️</div>
-                <h1 style="margin: 0 0 10px 0; font-size: 28px;">Ошибка загрузки</h1>
-                <p style="margin: 0 0 20px 0; color: #b0b0b0; font-size: 16px;">
-                    Приложение не смогло инициализироваться.
-                </p>
-                <div style="
-                    background: rgba(0, 0, 0, 0.3);
-                    padding: 20px;
-                    border-radius: 10px;
-                    margin-bottom: 20px;
-                    text-align: left;
-                    font-family: 'Courier New', monospace;
-                    font-size: 12px;
-                    max-height: 200px;
-                    overflow-y: auto;
-                ">
-                    <strong style="color: #ff6b6b;">Error:</strong><br>
-                    ${error.message || 'Unknown error'}
-                </div>
-                <button onclick="location.reload()" style="
-                    padding: 12px 30px;
-                    background: linear-gradient(135deg, #4da3ff 0%, #357abd 100%);
-                    color: white;
-                    border: none;
-                    border-radius: 10px;
-                    font-size: 16px;
-                    font-weight: 600;
-                    cursor: pointer;
-                    transition: all 0.3s ease;
-                " onmouseover="this.style.boxShadow='0 0 30px rgba(77, 163, 255, 0.5)'" 
-                   onmouseout="this.style.boxShadow='none'">
-                    Перезагрузить страницу
-                </button>
-                <p style="margin-top: 20px; font-size: 12px; color: #888;">
-                    <a href="index.html" style="color: #4da3ff; text-decoration: none;">
-                        ← Вернуться на главную
-                    </a>
-                </p>
-            </div>
-        `;
-        
-        document.body.appendChild(errorScreen);
-    }
-
-    /**
-     * Установить timeout защиту
-     */
-    startTimeout() {
-        this.timeoutId = setTimeout(() => {
-            if (!this.state.isReady && this.state.isLoading) {
-                const error = new Error(
-                    `Application loading timeout (${this.config.appTimeout}ms). ` +
-                    `Last stage: ${JSON.stringify(this.state.stages)}. ` +
-                    `Check data path, map container, or network connection.`
-                );
-                this.handleBootstrapError(error);
-            }
-        }, this.config.appTimeout);
-    }
-
-    /**
-     * Очистить timeout
-     */
-    clearTimeout() {
-        if (this.timeoutId) {
-            clearTimeout(this.timeoutId);
-            this.timeoutId = null;
-        }
-    }
-
-    /**
-     * Управление loader
-     */
-    setLoading(isLoading) {
-        const loader = document.getElementById('preloader');
-        if (loader) {
-            if (isLoading) {
-                loader.style.display = 'flex';
-            } else {
-                loader.style.opacity = '0';
-                loader.style.transition = 'opacity 0.5s ease';
-                setTimeout(() => {
-                    loader.style.display = 'none';
-                }, 500);
-            }
-        }
+        this.log(`❌ Critical bootstrap error: ${error.message}`, 'error');
+        // Показать мини-ошибку вместо полноэкранной
+        this.showMiniError(error.message);
     }
 
     /**
@@ -382,12 +271,11 @@ class GeoWikiBootstrap {
      */
     getState() {
         return {
-            isReady: this.state.isReady,
-            isLoading: this.state.isLoading,
+            dataLoaded: this.state.dataLoaded,
+            mapReady: this.state.mapReady,
+            uiReady: this.state.uiReady,
             error: this.state.error?.message,
-            stages: this.state.stages,
-            elapsed: Date.now() - this.state.startTime + 'ms',
-            modules: Object.keys(this.modules)
+            elapsed: Date.now() - this.state.startTime + 'ms'
         };
     }
 }
