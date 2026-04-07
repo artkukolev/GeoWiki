@@ -9,12 +9,26 @@ class GeoWikiApp {
         this.userProgress = this.loadProgress();
     }
 
+    get exploredCountries() {
+        return this.userProgress?.exploredCountries || [];
+    }
+
+    get completedLevels() {
+        return this.userProgress?.completedLevels || [];
+    }
+
+    get xp() {
+        return this.userProgress?.xp || 0;
+    }
+
+    get achievements() {
+        return this.userProgress?.achievements || [];
+    }
+
     /**
      * Start the application
      */
     async start() {
-        console.log('🌍 GeoWiki App starting...');
-
         // Setup navigation
         this.setupNavigation();
 
@@ -23,8 +37,6 @@ class GeoWikiApp {
 
         // Show initial view
         this.showView('landing');
-
-        console.log('✅ GeoWiki App started');
     }
 
     /**
@@ -151,8 +163,9 @@ class GeoWikiApp {
      * Show achievement notification
      */
     showAchievementNotification(achievement) {
-        // Simple notification - could be enhanced
-        console.log(`🏆 Achievement unlocked: ${achievement}`);
+        if (typeof window.showNotification === 'function') {
+            window.showNotification(`🏆 Achievement unlocked: ${achievement}`, 'success');
+        }
     }
 
     /**
@@ -165,16 +178,4 @@ class GeoWikiApp {
 
 // Export for global use
 window.GeoWikiApp = GeoWikiApp;
-
-// Global app instance
-window.GeoWikiApp = new GeoWikiApp();
-
-// Initialize when DOM is ready
-if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', () => window.GeoWikiApp.init());
-} else {
-    window.GeoWikiApp.init();
-}
-
-// Export for modules
-window.app = window.GeoWikiApp;
+window.app = null;

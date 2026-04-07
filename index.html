@@ -84,6 +84,21 @@
             <div class="section-container">
                 <h2 class="section-title">Начни своё путешествие</h2>
                 <p class="section-subtitle">Выбери интересующий тебя материк</p>
+                
+                <!-- Search Bar -->
+                <div class="search-bar-container" style="margin-bottom: 40px;">
+                    <div class="search-bar">
+                        <input 
+                            type="text" 
+                            id="landing-search" 
+                            class="search-input" 
+                            placeholder="🔍 Поиск страны или столицы..." 
+                            autocomplete="off">
+                        <button id="landing-search-btn" class="search-btn">Поиск</button>
+                        <div id="search-results" class="search-results" style="display: none;"></div>
+                    </div>
+                </div>
+
                 <div class="continents-grid">
                     <div class="continent-card" data-continent="europe">
                         <div class="continent-icon">🇪🇺</div>
@@ -299,5 +314,6 @@
     </div>
 
     <script src="js/main.js?v=20260407"></script>
+    <script src="js/search.js?v=20260407"></script>
 </body>
 </html>

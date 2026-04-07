@@ -88,15 +88,11 @@ class ProfileManager {
      * Initialize profile
      */
     async init() {
-        console.log('👤 Initializing profile...');
-
         // Wait for app to be ready
         await this.waitForApp();
 
         this.updateAchievements();
         this.renderProfile();
-
-        console.log('✅ Profile initialized');
     }
 
     /**

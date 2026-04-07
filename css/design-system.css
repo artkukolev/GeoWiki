@@ -253,3 +253,312 @@ a:hover {
     --spacing-3xl: 2rem;
   }
 }
+
+/* ===== SEARCH BAR ===== */
+.search-bar-container {
+  margin: 0;
+}
+
+.search-bar {
+  position: relative;
+  display: flex;
+  gap: var(--spacing-xs);
+  width: 100%;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.search-input {
+  flex: 1;
+  padding: var(--spacing-md) var(--spacing-lg);
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--border-radius-lg);
+  color: var(--text-primary);
+  font-family: var(--font-family-primary);
+  font-size: var(--text-sm);
+  backdrop-filter: blur(10px);
+  transition: var(--transition);
+}
+
+.search-input:focus {
+  outline: none;
+  border-color: var(--primary-color);
+  background: rgba(77, 163, 255, 0.15);
+  box-shadow: 0 0 20px rgba(77, 163, 255, 0.3);
+}
+
+.search-input::placeholder {
+  color: var(--text-light);
+}
+
+.search-btn {
+  padding: var(--spacing-md) var(--spacing-lg);
+  background: linear-gradient(135deg, var(--primary-color), var(--primary-dark));
+  border: none;
+  border-radius: var(--border-radius-lg);
+  color: white;
+  font-weight: 600;
+  cursor: pointer;
+  transition: var(--transition);
+  box-shadow: 0 0 20px rgba(77, 163, 255, 0.3);
+}
+
+.search-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 0 30px rgba(77, 163, 255, 0.5);
+}
+
+.search-results {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  margin-top: var(--spacing-xs);
+  background: var(--bg-dark-2);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--border-radius-lg);
+  backdrop-filter: blur(10px);
+  max-height: 300px;
+  overflow-y: auto;
+  z-index: 100;
+}
+
+.search-result-item {
+  padding: var(--spacing-md) var(--spacing-lg);
+  border-bottom: 1px solid rgba(77, 163, 255, 0.1);
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+.search-result-item:hover {
+  background: rgba(77, 163, 255, 0.1);
+}
+
+.search-result-item:last-child {
+  border-bottom: none;
+}
+
+.search-result-name {
+  display: block;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: 4px;
+}
+
+.search-result-capital {
+  display: block;
+  font-size: var(--text-xs);
+  color: var(--text-light);
+}
+
+/* ===== SKELETON LOADING ===== */
+.skeleton {
+  display: inline-block;
+  background: linear-gradient(90deg, 
+    var(--bg-dark-2) 0%, 
+    var(--bg-dark-3) 50%, 
+    var(--bg-dark-2) 100%);
+  background-size: 200% 100%;
+  animation: skeleton-loading 1.5s infinite;
+}
+
+@keyframes skeleton-loading {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
+}
+
+.card-skeleton {
+  height: 200px;
+  border-radius: var(--border-radius-lg);
+  margin-bottom: var(--spacing-lg);
+}
+
+.skeleton-text {
+  height: 16px;
+  border-radius: 4px;
+  margin-bottom: 8px;
+}
+
+.skeleton-text.large {
+  height: 24px;
+  margin-bottom: 16px;
+}
+
+/* ===== BUTTON IMPROVEMENTS ===== */
+.cta-button,
+.level-btn,
+.map-button,
+.filter-btn {
+  position: relative;
+  overflow: hidden;
+  transition: var(--transition);
+}
+
+.cta-button::before,
+.level-btn::before,
+.map-button::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: rgba(255, 255, 255, 0.1);
+  transition: left 0.3s ease;
+}
+
+.cta-button:hover::before,
+.level-btn:hover::before,
+.map-button:hover::before {
+  left: 100%;
+}
+
+.cta-button,
+.level-btn,
+.map-button {
+  box-shadow: 0 0 20px rgba(77, 163, 255, 0.3);
+}
+
+.cta-button:hover,
+.level-btn:hover,
+.map-button:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 0 30px rgba(77, 163, 255, 0.5);
+}
+
+.filter-btn {
+  border-radius: var(--border-radius);
+  padding: var(--spacing-sm) var(--spacing-md);
+  background: rgba(77, 163, 255, 0.1);
+  border: 1px solid rgba(77, 163, 255, 0.2);
+  color: var(--text-secondary);
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.filter-btn:hover {
+  background: rgba(77, 163, 255, 0.2);
+  border-color: rgba(77, 163, 255, 0.5);
+}
+
+.filter-btn.active {
+  background: var(--primary-color);
+  border-color: var(--primary-color);
+  color: white;
+}
+
+/* ===== CONTINENT CARD IMPROVEMENTS ===== */
+.continent-card {
+  position: relative;
+  overflow: hidden;
+  border-radius: var(--border-radius-lg);
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
+  padding: var(--spacing-lg);
+  text-align: center;
+  cursor: pointer;
+  transition: var(--transition);
+  backdrop-filter: blur(10px);
+}
+
+.continent-card::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(circle, rgba(77, 163, 255, 0.3) 0%, transparent 70%);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.continent-card:hover {
+  background: rgba(77, 163, 255, 0.15);
+  border-color: var(--primary-color);
+  transform: translateY(-4px);
+  box-shadow: 0 0 30px rgba(77, 163, 255, 0.4);
+}
+
+.continent-card:hover::before {
+  opacity: 1;
+}
+
+.continent-icon {
+  font-size: 3rem;
+  margin-bottom: var(--spacing-md);
+  display: block;
+}
+
+.continent-card h3 {
+  font-size: var(--text-lg);
+  font-weight: 600;
+  color: var(--text-primary);
+  margin: 0 0 8px 0;
+}
+
+.continent-card p {
+  color: var(--text-light);
+  margin: 0;
+  font-size: var(--text-xs);
+}
+
+/* ===== LEVEL CARD IMPROVEMENTS ===== */
+.level-card {
+  position: relative;
+  overflow: hidden;
+  border-radius: var(--border-radius-lg);
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
+  backdrop-filter: blur(10px);
+  transition: var(--transition);
+  cursor: pointer;
+  height: 100%;
+}
+
+.level-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(135deg, transparent 0%, rgba(77, 163, 255, 0.1) 100%);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.level-card:hover {
+  transform: translateY(-8px);
+  border-color: var(--primary-color);
+  box-shadow: 0 10px 40px rgba(77, 163, 255, 0.3);
+}
+
+.level-card:hover::before {
+  opacity: 1;
+}
+
+/* ===== RESPONSIVE IMPROVEMENTS ===== */
+@media (max-width: 768px) {
+  .search-bar {
+    flex-direction: column;
+  }
+  
+  .search-results {
+    position: static;
+    margin-top: var(--spacing-xs);
+  }
+  
+  .continent-card:hover {
+    transform: scale(1.02);
+  }
+  
+  .level-card:hover {
+    transform: scale(1.02);
+  }
+}

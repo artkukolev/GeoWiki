@@ -1892,4 +1892,103 @@ footer {
 .map-button:hover .btn-arrow {
     transform: translateX(8px);
 }
+
+/* ===== SMOOTH ANIMATIONS ===== */
+
+@keyframes slideInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes slideInDown {
+    from {
+        opacity: 0;
+        transform: translateY(-30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes fadeInScale {
+    from {
+        opacity: 0;
+        transform: scale(0.95);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+/* Apply animations to sections */
+.hero-section,
+.explore-section,
+.levels-section,
+.progress-section,
+.mini-game-section {
+    animation: slideInUp 0.6s ease-out forwards;
+}
+
+.explore-section {
+    animation-delay: 0.1s;
+}
+
+.levels-section {
+    animation-delay: 0.2s;
+}
+
+.progress-section {
+    animation-delay: 0.3s;
+}
+
+.mini-game-section {
+    animation-delay: 0.4s;
+}
+
+/* Continent cards stagger animation */
+.continent-card {
+    animation: fadeInScale 0.5s ease-out forwards;
+    opacity: 0;
+}
+
+.continent-card:nth-child(1) { animation-delay: 0.1s; }
+.continent-card:nth-child(2) { animation-delay: 0.2s; }
+.continent-card:nth-child(3) { animation-delay: 0.3s; }
+.continent-card:nth-child(4) { animation-delay: 0.4s; }
+
+/* Level cards stagger animation */
+.level-card {
+    animation: fadeInScale 0.5s ease-out forwards;
+    opacity: 0;
+}
+
+.level-card:nth-child(1) { animation-delay: 0.1s; }
+.level-card:nth-child(2) { animation-delay: 0.2s; }
+.level-card:nth-child(3) { animation-delay: 0.3s; }
+.level-card:nth-child(4) { animation-delay: 0.4s; }
+.level-card:nth-child(5) { animation-delay: 0.5s; }
+
+/* Cursor pointer for interactive elements */
+.continent-card,
+.level-card,
+.cta-button,
+.level-btn,
+.map-button,
+.filter-btn,
+button {
+    cursor: pointer;
+}
+
+/* Smooth hover transitions */
+a, button, .level-card, .continent-card {
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
 }

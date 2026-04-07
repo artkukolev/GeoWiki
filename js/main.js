@@ -15,9 +15,6 @@
  * - Fallback UI
  */
 
-// Инициализация приложения
-console.log('🌍 GeoWiki v2.0 - Loading new architecture...');
-
 // Планы инициализации для разных страниц
 const initPlans = {
     landing: ['LandingManager', 'GeoWikiApp'],
@@ -43,19 +40,19 @@ function getCurrentPage() {
 class AppInitializer {
     constructor() {
         this.currentPage = getCurrentPage();
-        console.log(`📄 Current page: ${this.currentPage}`);
     }
 
     async init() {
         try {
-            // Загрузить данные
-            console.log('📊 Loading data layer...');
             const countries = await window.dataLayer.loadCountries();
             window.countriesData = countries;
-            
-            console.log('✅ Data layer loaded');
+
+            await this.initCoreSystems();
+            await this.initUILayer();
+            await this.startApp();
         } catch (error) {
-            throw new Error(`Data loading failed: ${error.message}`);
+            this.showErrorScreen(error);
+            throw new Error(`App initialization failed: ${error.message}`);
         }
     }
 
@@ -63,8 +60,6 @@ class AppInitializer {
      * Initialize core systems
      */
     async initCoreSystems() {
-        console.log('⚙️ Initializing core systems...');
-
         // Initialize progress system
         if (typeof ProgressManager !== 'undefined') {
             this.progressManager = new ProgressManager();
@@ -76,16 +71,12 @@ class AppInitializer {
             this.modalManager = new ModalManager();
             await this.modalManager.init();
         }
-
-        console.log('✅ Core systems initialized');
     }
 
     /**
      * Initialize UI layer
      */
     async initUILayer() {
-        console.log('🎨 Initializing UI layer...');
-
         // Initialize main UI components
         this.initAnimations();
         this.initInteractions();
@@ -93,21 +84,16 @@ class AppInitializer {
         // Initialize page-specific components
         const currentPage = this.getCurrentPage();
         await this.initPageComponents(currentPage);
-
-        console.log('✅ UI layer initialized');
     }
 
     /**
      * Start the application
      */
     async startApp() {
-        console.log('🚀 Starting application...');
-
-        // Start main app logic
+        // Start main app logic and expose global app instance
         this.app = new GeoWikiApp();
+        window.app = this.app;
         await this.app.start();
-
-        console.log('✅ Application started');
     }
 
     /**
@@ -135,6 +121,9 @@ class AppInitializer {
             case 'profile':
                 await this.initProfilePage();
                 break;
+            case 'quiz':
+                await this.initQuizPage();
+                break;
             case 'landing':
                 await this.initLandingPage();
                 break;
@@ -145,8 +134,6 @@ class AppInitializer {
      * Initialize map page
      */
     async initMapPage() {
-        console.log('🗺️ Initializing map page...');
-
         // Lazy load Leaflet
         await this.loadLeaflet();
 
@@ -162,8 +149,6 @@ class AppInitializer {
      * Initialize encyclopedia page
      */
     async initEncyclopediaPage() {
-        console.log('📖 Initializing encyclopedia page...');
-
         // Load encyclopedia manager
         await this.loadScript('./js/encyclopedia-manager.js');
 
@@ -176,8 +161,6 @@ class AppInitializer {
      * Initialize profile page
      */
     async initProfilePage() {
-        console.log('👤 Initializing profile page...');
-
         // Load profile manager
         await this.loadScript('./js/profile-manager.js');
 
@@ -187,11 +170,21 @@ class AppInitializer {
     }
 
     /**
+     * Initialize quiz page
+     */
+    async initQuizPage() {
+        // Load quiz manager
+        await this.loadScript('./js/quiz.js');
+
+        // Initialize quiz
+        this.quizManager = new QuizManager();
+        await this.quizManager.init();
+    }
+
+    /**
      * Initialize landing page
      */
     async initLandingPage() {
-        console.log('🏠 Initializing landing page...');
-
         // Load landing manager
         await this.loadScript('./js/landing-manager.js');
 
@@ -643,16 +636,30 @@ class AppInitializer {
 }
 
 // Initialize on DOM ready
-document.addEventListener('DOMContentLoaded', () => {
-    const bootstrap = new GeoWikiBootstrap();
-    bootstrap.init();
+document.addEventListener('DOMContentLoaded', async () => {
+    try {
+        const bootstrap = new GeoWikiBootstrap();
+        await bootstrap.init();
+
+        const appInitializer = new AppInitializer();
+        await appInitializer.init();
+    } catch (err) {
+        console.error('Initialization failed:', err);
+    }
 });
 
 // Fallback for older browsers
-window.addEventListener('load', () => {
+window.addEventListener('load', async () => {
     if (!document.querySelector('#error-screen')) {
-        const bootstrap = new GeoWikiBootstrap();
-        bootstrap.init();
+        try {
+            const bootstrap = new GeoWikiBootstrap();
+            await bootstrap.init();
+
+            const appInitializer = new AppInitializer();
+            await appInitializer.init();
+        } catch (err) {
+            console.error('Initialization failed:', err);
+        }
     }
 });
 

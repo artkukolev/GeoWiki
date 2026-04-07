@@ -12,8 +12,6 @@ class EncyclopediaManager {
      * Initialize encyclopedia page
      */
     async init() {
-        console.log('📖 Initializing encyclopedia...');
-
         // Get country from URL
         const urlParams = new URLSearchParams(window.location.search);
         const countryId = urlParams.get('country');
@@ -25,8 +23,6 @@ class EncyclopediaManager {
 
         // Load country data
         await this.loadCountryData(countryId);
-
-        console.log('✅ Encyclopedia initialized');
     }
 
     /**

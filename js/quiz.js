@@ -10,19 +10,14 @@ class QuizManager {
         this.currentQuestionIndex = 0;
         this.score = 0;
         this.selectedCountry = null;
-
-        this.init();
     }
 
     /**
      * Initialize quiz
      */
     async init() {
-        console.log('🧠 Initializing quiz...');
-
         // Wait for countries data to load
         if (!window.countriesData) {
-            console.log('Waiting for countries data...');
             await this.waitForCountriesData();
         }
 
@@ -41,8 +36,6 @@ class QuizManager {
         } else {
             this.showError('Страна не найдена');
         }
-
-        console.log('✅ Quiz initialized');
     }
 
     /**

@@ -12,8 +12,6 @@ class LandingManager {
      * Initialize landing page
      */
     async init() {
-        console.log('🏠 Initializing landing page...');
-
         // Setup continent selection
         this.setupContinentCards();
 
@@ -22,8 +20,6 @@ class LandingManager {
 
         // Setup animations
         this.setupAnimations();
-
-        console.log('✅ Landing page initialized');
     }
 
     /**

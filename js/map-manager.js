@@ -14,8 +14,6 @@ class MapManager {
      * Initialize the map
      */
     async init() {
-        console.log('🗺️ Initializing map...');
-
         // Get URL parameters
         const urlParams = new URLSearchParams(window.location.search);
         this.currentFilter = urlParams.get('continent');
@@ -31,8 +29,6 @@ class MapManager {
 
         // Setup map interactions
         this.setupInteractions();
-
-        console.log('✅ Map initialized');
     }
 
     /**
